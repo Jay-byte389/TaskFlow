@@ -15,7 +15,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from '@react-native-firebase/auth';
-import {signInWithGoogle} from '../services/googleSign';
+import { signInWithGoogle } from '../services/googleSign';
 import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -40,7 +40,7 @@ const LoginScreen = () => {
         email.trim().toLowerCase(),
         password,
       );
-        const user = userCredential.user;
+      const user = userCredential.user;
       const userSnapshot = await getDoc(doc(db, 'users', user.uid));
 
       if (userSnapshot.exists()) {
@@ -84,17 +84,12 @@ const LoginScreen = () => {
     navigation.navigate('Register');
   };
 
-  const handlegoogle= async ()=>{
-        try {
-      const user = await signInWithGoogle();
-
-      console.log('Google user:', user);
-
-      navigation.replace('BottomTabs');
+  const handleGooglePress = async () => {
+    try {
+      await signInWithGoogle();
     } catch (error) {
-      console.log('Google login failed:', error);
     }
-  }
+  };
   return (
     <SafeAreaView style={styles.main}>
       <View style={styles.mainContainer}>
@@ -165,7 +160,11 @@ const LoginScreen = () => {
 
           {/* Social Buttons */}
           <View style={styles.socialContainer}>
-            <TouchableOpacity style={styles.socialButton} activeOpacity={0.7} onPress={handlegoogle}>
+            <TouchableOpacity
+              style={styles.socialButton}
+              activeOpacity={0.7}
+              onPress={handleGooglePress}
+            >
               <RedGlobe width={18} height={18} />
               <Text style={styles.socialText}>Google</Text>
             </TouchableOpacity>

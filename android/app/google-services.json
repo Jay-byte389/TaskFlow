@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "575323103941-3ehpal3b7o8dcqcrkv452vemjndba6v3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.taskflow",
+            "certificate_hash": "31c6ee39c96951d1d458fc85d74e91e148517eb9"
+          }
+        },
+        {
           "client_id": "575323103941-fpaas8e20tikvemm9l4ai7qrvars2bjt.apps.googleusercontent.com",
           "client_type": 3
         }
