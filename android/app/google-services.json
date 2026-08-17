@@ -12,7 +12,12 @@
           "package_name": "com.taskflow"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "575323103941-fpaas8e20tikvemm9l4ai7qrvars2bjt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBKnI3Q9NFAam0eL5t2n3_Pb1PdFiuqu3U"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "575323103941-fpaas8e20tikvemm9l4ai7qrvars2bjt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
