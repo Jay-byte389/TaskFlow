@@ -55,7 +55,7 @@ const ProjectDetails = () => {
   };
 
   const handleNext = () => {
-    navigation.navigate('EditProject');
+    navigation.navigate('EditProject',{project});
   };
 
   const priorityStyle = getPriorityStyle(project?.priority);

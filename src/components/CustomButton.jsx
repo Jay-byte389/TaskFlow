@@ -12,6 +12,7 @@ export default function CustomButton({
   disabled = false,
   style,
   textStyle,
+  disabledtxt
 }) {
   return (
     <TouchableOpacity
@@ -28,7 +29,7 @@ export default function CustomButton({
         <ActivityIndicator color="#FFFFFF" size="small" />
       ) : (
         <View style={styles.contentContainer}>
-          <Text style={[styles.text, textStyle]}>{title}</Text>
+          <Text style={[styles.text, textStyle,disabledtxt]}>{title}</Text>
           {icon && (
             <View style={styles.iconWrapper}>
               <FontAwesomeIcon icon={icon} size={16} color="#FFFFFF" />
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     
   },
   disabledButton: {
-    backgroundColor: '#94A3B8',
+    backgroundColor: '#E2E8F0',
     boxShadow: 'none',
     
   },

@@ -1,31 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getAuth } from '@react-native-firebase/auth'; 
+import { getAuth, signOut } from '@react-native-firebase/auth';
 import Feather from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../redux/slice/snackBarSlice';
 
 const ProfileScreen = () => {
-
-  const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to log out?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {            
-              await getAuth().signOut();
-            } catch (error) {
-              console.log('Logout Error:', error);
-              Alert.alert('Error', 'Failed to log out. Please try again.');
-            }
-          },
-        },
-      ]
-    );
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const handleLogout = async () => {
+    try {
+      const authInstance = getAuth();
+      await signOut(authInstance);
+      dispatch(
+        showSnackbar({
+          message: 'Logged out successfully!',
+          type: 'success',
+        }),
+      );
+      navigation.navigate('Auth', {
+        screen: 'Splash',
+        params: { fromLogout: true },
+      });
+      console.log('Signout Pressed');
+      // navigation.replace("Login")
+    } catch (error) {
+      console.log('Logout Error:', error);
+      Alert.alert('Error', 'Failed to log out. Please try again.');
+    }
   };
 
   return (
@@ -33,9 +37,9 @@ const ProfileScreen = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Profile</Text>
 
-        <TouchableOpacity 
-          style={styles.logoutButton} 
-          activeOpacity={0.7} 
+        <TouchableOpacity
+          style={styles.logoutButton}
+          activeOpacity={0.7}
           onPress={handleLogout}
         >
           <Feather name="log-out" size={20} color="#EF4444" />

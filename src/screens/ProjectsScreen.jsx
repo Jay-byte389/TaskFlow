@@ -16,8 +16,9 @@ import { Fonts } from '../constants/Fonts';
 const ProjectsScreen = () => {
   const [activeTab, setActiveTab] = useState('All');
   const navigation = useNavigation();
+  
   const handleNext = () => {
-    navigation.navigate('ProjectDetails');
+    navigation.navigate('CreateProject');
   };
 
   const getPriorityStyle = priority => {
@@ -34,7 +35,7 @@ const ProjectsScreen = () => {
         return { bg: '#F1F5F9', text: '#64748B' };
     }
   };
-   
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View>
@@ -62,103 +63,107 @@ const ProjectsScreen = () => {
         </View>
       </View>
       <View>
-      <FlatList
-        data={PROJECTS_DATA}
-        style={styles.flat}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listPadding}
-        renderItem={({ item }) => {
-          {
-            const priorityStyle = getPriorityStyle(item.priority);
+        <FlatList
+          data={PROJECTS_DATA}
+          style={styles.flat}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listPadding}
+          renderItem={({ item }) => {
+            {
+              const priorityStyle = getPriorityStyle(item.priority);
 
-            return (
-              <TouchableOpacity
-                style={styles.card}
-                activeOpacity={0.7}
-                onPress={() =>
-                  navigation.navigate('ProjectDetails', { project: item })
-                }
-              >
-                {/* Header Row: Title & Priority */}
-                <View style={styles.cardHeader}>
-                  <View style={styles.titleGroup}>
+              return (
+                <TouchableOpacity
+                  style={styles.card}
+                  activeOpacity={0.7}
+                  onPress={() =>
+                    navigation.navigate('ProjectDetails', { project: item })
+                  }
+                >
+                  {/* Header Row: Title & Priority */}
+                  <View style={styles.cardHeader}>
+                    <View style={styles.titleGroup}>
+                      <View
+                        style={[
+                          styles.folderIconBg,
+                          { backgroundColor: `${item.themeColor}15` },
+                        ]}
+                      >
+                        <Feather
+                          name="folder"
+                          size={20}
+                          color={item.themeColor}
+                        />
+                      </View>
+                      <View>
+                        <Text style={styles.cardTitle}>{item.title}</Text>
+                        <Text style={styles.cardAuthor}>{item.author}</Text>
+                      </View>
+                    </View>
+
                     <View
                       style={[
-                        styles.folderIconBg,
-                        { backgroundColor: `${item.themeColor}15` },
+                        styles.priorityBadge,
+                        { backgroundColor: priorityStyle.bg },
                       ]}
                     >
-                      <Feather
-                        name="folder"
-                        size={20}
-                        color={item.themeColor}
+                      <Text
+                        style={[
+                          styles.priorityText,
+                          { color: priorityStyle.text },
+                        ]}
+                      >
+                        {item.priority}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* Meta Data Row: Tasks, Members, Due Date, Status */}
+                  <View style={styles.metaRow}>
+                    <View style={styles.metaLeft}>
+                      <View style={styles.metaItem}>
+                        <Feather
+                          name="check-square"
+                          size={13}
+                          color="#64748B"
+                        />
+                        <Text style={styles.metaText}>{item.tasksCount}</Text>
+                      </View>
+                      <View style={styles.metaItem}>
+                        <Feather name="users" size={13} color="#64748B" />
+                        <Text style={styles.metaText}>{item.membersCount}</Text>
+                      </View>
+                      <View style={styles.metaItem}>
+                        <Feather name="calendar" size={13} color="#64748B" />
+                        <Text style={styles.metaText}>{item.dueDate}</Text>
+                      </View>
+                    </View>
+
+                    <View style={styles.statusBadge}>
+                      <Text style={styles.statusText}>{item.status}</Text>
+                    </View>
+                  </View>
+
+                  {/* Progress Bar Row */}
+                  <View style={styles.progressRow}>
+                    <View style={styles.track}>
+                      <View
+                        style={[
+                          styles.fill,
+                          {
+                            width: `${item.progress}%`,
+                            backgroundColor: item.themeColor,
+                          },
+                        ]}
                       />
                     </View>
-                    <View>
-                      <Text style={styles.cardTitle}>{item.title}</Text>
-                      <Text style={styles.cardAuthor}>{item.author}</Text>
-                    </View>
+                    <Text style={styles.progressText}>{item.progress}%</Text>
                   </View>
-
-                  <View
-                    style={[
-                      styles.priorityBadge,
-                      { backgroundColor: priorityStyle.bg },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.priorityText,
-                        { color: priorityStyle.text },
-                      ]}
-                    >
-                      {item.priority}
-                    </Text>
-                  </View>
-                </View>
-
-                {/* Meta Data Row: Tasks, Members, Due Date, Status */}
-                <View style={styles.metaRow}>
-                  <View style={styles.metaLeft}>
-                    <View style={styles.metaItem}>
-                      <Feather name="check-square" size={13} color="#64748B" />
-                      <Text style={styles.metaText}>{item.tasksCount}</Text>
-                    </View>
-                    <View style={styles.metaItem}>
-                      <Feather name="users" size={13} color="#64748B" />
-                      <Text style={styles.metaText}>{item.membersCount}</Text>
-                    </View>
-                    <View style={styles.metaItem}>
-                      <Feather name="calendar" size={13} color="#64748B" />
-                      <Text style={styles.metaText}>{item.dueDate}</Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.statusBadge}>
-                    <Text style={styles.statusText}>{item.status}</Text>
-                  </View>
-                </View>
-
-                {/* Progress Bar Row */}
-                <View style={styles.progressRow}>
-                  <View style={styles.track}>
-                    <View
-                      style={[
-                        styles.fill,
-                        {
-                          width: `${item.progress}%`,
-                          backgroundColor: item.themeColor,
-                        },
-                      ]}
-                    />
-                  </View>
-                  <Text style={styles.progressText}>{item.progress}%</Text>
-                </View>
-              </TouchableOpacity>
-            );
-          }
-        }}
-      />
+                </TouchableOpacity>
+              );
+            }
+          }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -171,9 +176,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchMain: {
-    paddingVertical:"2%",
+    paddingVertical: '2%',
     paddingHorizontal: '4%',
-    backgroundColor:"#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   searchContainer: {
     justifyContent: 'center',
@@ -188,14 +193,18 @@ const styles = StyleSheet.create({
     color: '#111827',
     bottom: '10%',
     paddingHorizontal: '3%',
-  },flat:{
-    paddingVertical:"4%",
+  },
+  tabsContainer: {
+    paddingTop: '3%',
+  },
+  flat: {
+    paddingVertical: '4%',
   },
   listPadding: {
     paddingHorizontal: '4%',
-    paddingBottom:'35%',
+    paddingBottom: '40%',
   },
-card: {
+  card: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 16,
@@ -222,7 +231,7 @@ card: {
   },
   cardTitle: {
     fontSize: 16,
-    fontFamily: Fonts.Bold ,
+    fontFamily: Fonts.Bold,
     color: '#0F172A',
   },
   cardAuthor: {

@@ -31,7 +31,7 @@ export default function Input({
             <Ionicons
               name={icon} 
               size={15}
-              color={'#0F172A'} 
+              color={'#9CA3AF'} 
               solid 
             />
           </View>

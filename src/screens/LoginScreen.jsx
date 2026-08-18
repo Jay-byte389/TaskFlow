@@ -17,7 +17,10 @@ import {
 } from '@react-native-firebase/auth';
 import { signInWithGoogle } from '../services/googleSign';
 import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../redux/slice/snackBarSlice';
 const LoginScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,11 +50,16 @@ const LoginScreen = () => {
         const userData = userSnapshot.data();
         console.log('Logged in user:', userData);
 
-        Alert.alert(
-          'Login Successful',
-          `Welcome ${userData.firstName} ${userData.lastName}`,
-        );
-        // navigation.replace("BottomTabs");
+        dispatch(
+      showSnackbar({
+        message: 'Login SuccessFully...',
+        type: 'success',
+      })
+    );
+        navigation.replace('BottomTabs', {
+          screen: 'Home',
+          params: { userData },
+        });
       } else {
         Alert.alert('Error', 'User profile was not found.');
       }
@@ -87,8 +95,7 @@ const LoginScreen = () => {
   const handleGooglePress = async () => {
     try {
       await signInWithGoogle();
-    } catch (error) {
-    }
+    } catch (error) {}
   };
   return (
     <SafeAreaView style={styles.main}>

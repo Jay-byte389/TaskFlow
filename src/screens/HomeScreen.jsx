@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,10 +9,56 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
-import Svg, { Path, Defs, LinearGradient, Stop, Line } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getAuth } from '@react-native-firebase/auth';
+
+// 1. ADDED FIRESTORE IMPORTS
+import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 
 const HomeScreen = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  const initial = firstName.charAt(0).toUpperCase();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const authInstance = getAuth();
+      const currentUser = authInstance.currentUser;
+
+      if (!currentUser) return;
+
+      // Check 1: Google Sign-In (displayName)
+      if (currentUser.displayName) {
+        const nameParts = currentUser.displayName.trim().split(' ');
+        setFirstName(nameParts[0] || 'User');
+        setLastName(nameParts.slice(1).join(' ') || '');
+        return;
+      }
+
+      // Check 2: Email/Password (Fetch from Firestore)
+      try {
+        const db = getFirestore();
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setFirstName(userData.firstName || 'User');
+          setLastName(userData.lastName || '');
+        } else {
+          // Check 3: Parsing from Email string if document doesn't exist
+          const rawEmail = currentUser.email?.split('@')[0] || 'User';
+          setFirstName(rawEmail[0].charAt(0).toUpperCase() + emailParts[0].slice(1));
+          setLastName(rawEmail.slice(1).join(' '));
+        }
+      } catch (error) {
+        console.log('Error fetching user data from Firestore:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
@@ -24,11 +70,13 @@ const HomeScreen = () => {
         <View style={styles.header}>
           <View style={styles.userInfo}>
             <View style={styles.avatar}>
-              <Text style={styles.avatarText}>AC</Text>
+              <Text style={styles.avatarText}>{initial || 'U'}</Text>
             </View>
             <View style={styles.userTextContainer}>
               <Text style={styles.greetingText}>Good morning 👋</Text>
-              <Text style={styles.userName}>Alex Chen</Text>
+              <Text style={styles.userName}>
+                {firstName} {lastName}
+              </Text>
             </View>
           </View>
 
@@ -47,7 +95,7 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        {/* 2x2 Metrics Cards with Percentages */}
+        {/* 2x2 Metrics Cards */}
         <View style={styles.metricsGrid}>
           {/* Projects */}
           <View style={styles.metricCard}>
@@ -107,61 +155,6 @@ const HomeScreen = () => {
             <Text style={styles.metricLabel}>Done</Text>
           </View>
         </View>
-
-        {/* Weekly Progress Section */}
-        {/* <View style={styles.chartCard}>
-          <Text style={styles.sectionTitle}>Weekly Progress</Text>
-
-          <View style={styles.chartContainer}>
-            <View style={styles.yAxis}>
-              <Text style={styles.axisLabel}>100%</Text>
-              <Text style={styles.axisLabel}>75%</Text>
-              <Text style={styles.axisLabel}>50%</Text>
-              <Text style={styles.axisLabel}>25%</Text>
-              <Text style={styles.axisLabel}>0%</Text>
-            </View>
-
-            <View style={styles.chartArea}>
-              <Svg height="140" width="100%" viewBox="0 0 280 140">
-                <Defs>
-                  <LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-                    <Stop offset="0%" stopColor="#7C3AED" stopOpacity="0.35" />
-                    <Stop offset="100%" stopColor="#7C3AED" stopOpacity="0.0" />
-                  </LinearGradient>
-                </Defs>
-
-                <Line x1="0" y1="10" x2="280" y2="10" stroke="#F1F5F9" strokeDasharray="3,3" />
-                <Line x1="0" y1="40" x2="280" y2="40" stroke="#F1F5F9" strokeDasharray="3,3" />
-                <Line x1="0" y1="70" x2="280" y2="70" stroke="#F1F5F9" strokeDasharray="3,3" />
-                <Line x1="0" y1="100" x2="280" y2="100" stroke="#F1F5F9" strokeDasharray="3,3" />
-                <Line x1="0" y1="130" x2="280" y2="130" stroke="#F1F5F9" strokeDasharray="3,3" />
-
-                <Path
-                  d="M 10 90 C 30 50, 45 40, 60 40 C 80 40, 90 90, 105 90 C 125 90, 135 20, 155 20 C 180 20, 200 80, 230 110 C 250 120, 265 122, 275 125 L 275 130 L 10 130 Z"
-                  fill="url(#grad)"
-                />
-
-              
-                <Path
-                  d="M 10 90 C 30 50, 45 40, 60 40 C 80 40, 90 90, 105 90 C 125 90, 135 20, 155 20 C 180 20, 200 80, 230 110 C 250 120, 265 122, 275 125"
-                  fill="none"
-                  stroke="#7C3AED"
-                  strokeWidth="2.5"
-                />
-              </Svg>
-
-              <View style={styles.xAxis}>
-                <Text style={styles.axisLabel}>Mon</Text>
-                <Text style={styles.axisLabel}>Tue</Text>
-                <Text style={styles.axisLabel}>Wed</Text>
-                <Text style={styles.axisLabel}>Thu</Text>
-                <Text style={styles.axisLabel}>Fri</Text>
-                <Text style={styles.axisLabel}>Sat</Text>
-                <Text style={styles.axisLabel}>Sun</Text>
-              </View>
-            </View>
-          </View>
-        </View> */}
 
         {/* Active Projects Section */}
         <View style={styles.activeProjectsHeader}>
@@ -268,8 +261,6 @@ const styles = StyleSheet.create({
     borderRadius: 3.5,
     backgroundColor: '#EF4444',
   },
-
-  // Grid Cards
   metricsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -317,44 +308,6 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     marginTop: '1.5%',
   },
-
-  // Chart Card
-  chartCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 18,
-    padding: '4%',
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
-    marginBottom: '5%',
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#0F172A',
-  },
-  chartContainer: {
-    flexDirection: 'row',
-    marginTop: '3%',
-  },
-  yAxis: {
-    justifyContent: 'space-between',
-    paddingRight: '2%',
-    height: 125,
-  },
-  axisLabel: {
-    fontSize: 10,
-    color: '#94A3B8',
-  },
-  chartArea: {
-    flex: 1,
-  },
-  xAxis: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '1.5%',
-  },
-
-  // Active Projects
   activeProjectsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -378,8 +331,8 @@ const styles = StyleSheet.create({
     marginBottom: '4%',
   },
   projectIcon: {
-    width:'15%',
-    aspectRatio:1,
+    width: '15%',
+    aspectRatio: 1,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -432,33 +385,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#64748B',
-  },
-
-  // Bottom Navigation Bar
-  bottomTab: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 65,
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-  },
-  tabItem: {
-    alignItems: 'center',
-  },
-  tabLabel: {
-    fontSize: 11,
-    color: '#94A3B8',
-    marginTop: '1%',
   },
 });

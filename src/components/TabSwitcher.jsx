@@ -6,9 +6,11 @@ const TabSwitcher = ({
   tabs = [], // Array of tab strings passed from parent screen
   activeTab, // Currently active tab name
   onTabChange, // Callback function when a tab is pressed
+  style,
+  pillstyle
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,style]}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -20,7 +22,7 @@ const TabSwitcher = ({
             <TouchableOpacity
               key={tab}
               style={[
-                styles.pill,
+                styles.pill,pillstyle,
                 isActive ? styles.activePill : styles.inactivePill,
               ]}
               activeOpacity={0.7}
@@ -52,6 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    
   },
   pill: {
     paddingHorizontal: '5%',
@@ -67,8 +70,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
   },
   pillText: {
-    fontSize: 14,
-    fontFamily: Fonts.Bold || 'System',
+    fontSize: 13,
+    fontFamily: Fonts.SemiBold,
+    color:"#6B7280"
   },
   activePillText: {
     color: '#FFFFFF',

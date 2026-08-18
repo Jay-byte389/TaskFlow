@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Onboarding from 'react-native-onboarding-swiper';
 import OnboardingIcon1 from '../assets/icons/Onboarding1.svg';
@@ -9,7 +9,7 @@ import { Fonts } from '../constants/Fonts';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faLongArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import { getAuth } from '@react-native-firebase/auth';
 const CustomDot = ({ selected }) => (
   <View style={[styles.dot, selected ? styles.activeDot : styles.inactiveDot]} />
 );
@@ -31,6 +31,8 @@ const OnBoardingScreen = () => {
   const handleSkip = () => {
     navigation.replace("Login");
   };
+
+ 
 
   return (
     <SafeAreaView style={styles.container}>

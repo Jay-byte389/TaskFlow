@@ -5,22 +5,44 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../constants/colors';
 import { typography } from '../constants/typography';
 import { Fonts } from '../constants/Fonts';
-import {spacing} from "../constants/spacing";
+import { spacing } from '../constants/spacing';
 import SplashIcon from '../assets/icons/spalshiconsvg.svg';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getAuth } from '@react-native-firebase/auth';
 const image = require('../assets/images/Container.png');
 
 export default function SplashScreen() {
-  const navigation=useNavigation();
+  const navigation = useNavigation();
+  const route=useRoute();
   useEffect(() => {
-      const timer= setTimeout(() => {
-          navigation.navigate("OnBoarding");
-      },3000 );
-      return ()=>clearTimeout(timer);
-  }, [navigation])
-  
+    const timer = setTimeout(() => {
+      navigation.navigate('OnBoarding');
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
+  // useEffect(() => {
+  //     const user = getAuth().currentUser;
 
+  //     if (!user) {
+  //       // If user is logged out, go straight to Login (skipping OnBoarding)
+  //       navigation.replace('Login');
+  //     } else {
+  //       // Otherwise handle your regular startup flow or let AppNavigator switch stacks
+  //       navigation.replace('OnBoarding');
+  //     }
+  //   }, []);
+  useEffect(() => {
+    const fromLogout = route?.params?.fromLogout;
+
+    if (fromLogout) {
+      // 1. User tapped "Log Out" -> Go straight to Login
+      navigation.replace('Login');
+    } else {
+      // 2. Brand new user opening app for first time -> Go to OnBoarding
+      navigation.replace('OnBoarding');
+    }
+  }, [route?.params]);
 
   return (
     <LinearGradient
@@ -69,12 +91,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: spacing.eightyWidth,
   },
-  imagescontainer: {  
+  imagescontainer: {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: spacing.bottom,
   },
-  txtContainer: { 
+  txtContainer: {
     alignItems: 'center',
   },
   headingText: {

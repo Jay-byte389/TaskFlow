@@ -12,7 +12,9 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useEffect } from 'react';
-
+import {store} from "./src/redux/store";
+import { Provider } from 'react-redux';
+import GlobalSnackbar from "./src/components/GlobalSnackBar";
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
    useEffect(() => {
@@ -25,7 +27,10 @@ function App() {
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <NavigationContainer>
+        <Provider store={store}>
         <AppNavigator />
+        <GlobalSnackbar />
+        </Provider>
       </NavigationContainer>
     </SafeAreaProvider>
   );
