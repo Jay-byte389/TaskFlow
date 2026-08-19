@@ -26,15 +26,15 @@ const ProjectDetails = () => {
   const getPriorityStyle = priority => {
     switch (priority) {
       case 'Critical':
-        return { bg: '#FEE2E2', text: '#EF4444' };
+        return { bg: colors.CriticalRedBg, text: colors.CriticalRedText };
       case 'High':
-        return { bg: '#FEF3C7', text: '#D97706' };
+        return { bg: colors.HighAmberBg, text: colors.HighAmberText };
       case 'Medium':
-        return { bg: '#E0F2FE', text: '#0284C7' };
+        return { bg: colors.MediumBlueBg, text: colors.MediumBlueText };
       case 'Low':
-        return { bg: '#DCFCE7', text: '#16A34A' };
+        return { bg: colors.LowGreenBg, text: colors.LowGreenText };
       default:
-        return { bg: '#F1F5F9', text: '#64748B' };
+        return { bg: colors.Slate100, text: colors.MutedSlateGray };
     }
   };
 
@@ -42,20 +42,20 @@ const ProjectDetails = () => {
   const getStatusStyle = status => {
     switch (status) {
       case 'In Progress':
-        return { bg: '#E0F2FE', text: '#1E40AF', dot: '#F59E0B' };
+        return { bg: colors.MediumBlueBg, text: colors.primary, dot: colors.HighAmberText };
       case 'Completed':
-        return { bg: '#DCFCE7', text: '#166534', dot: '#F59E0B' };
+        return { bg: colors.LowGreenBg, text: colors.LowGreenText, dot: colors.HighAmberText };
       case 'Backlog':
-        return { bg: '#F1F5F9', text: '#64748B', dot: '#2563EB' };
+        return { bg: colors.Slate100, text: colors.MutedSlateGray, dot: colors.primary };
       case 'Testing':
-        return { bg: '#F3E8FF', text: '#6B21A8', dot: '#10B981' };
+        return { bg: colors.PurpleIconBg, text: colors.secondary, dot: colors.LowGreenText };
       default:
-        return { bg: '#F1F5F9', text: '#64748B', dot: '#64748B' };
+        return { bg: colors.Slate100, text: colors.MutedSlateGray, dot: colors.MutedSlateGray };
     }
   };
 
   const handleNext = () => {
-    navigation.navigate('EditProject',{project});
+    navigation.navigate('EditProject', { project });
   };
 
   const priorityStyle = getPriorityStyle(project?.priority);
@@ -79,13 +79,13 @@ const ProjectDetails = () => {
             <View
               style={[
                 styles.folderIconBg,
-                { backgroundColor: `${project?.themeColor || '#2563EB'}15` },
+                { backgroundColor: `${project?.themeColor || colors.primary}15` },
               ]}
             >
               <Feather
                 name="folder"
                 size={22}
-                color={project?.themeColor || '#2563EB'}
+                color={project?.themeColor || colors.primary}
               />
             </View>
             <View>
@@ -118,7 +118,7 @@ const ProjectDetails = () => {
                 styles.fill,
                 {
                   width: `${project?.progress || 0}%`,
-                  backgroundColor: project?.themeColor || '#2563EB',
+                  backgroundColor: project?.themeColor || colors.primary,
                 },
               ]}
             />
@@ -128,25 +128,25 @@ const ProjectDetails = () => {
         {/* 4 Cards Stat Grid */}
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Feather name="check-square" size={16} color="#2563EB" />
+            <Feather name="check-square" size={16} color={colors.primary} />
             <Text style={styles.statNumber}>{project?.tasksCount || 0}</Text>
             <Text style={styles.statLabel}>Tasks</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Feather name="users" size={16} color="#2563EB" />
+            <Feather name="users" size={16} color={colors.primary} />
             <Text style={styles.statNumber}>{project?.membersCount || 0}</Text>
             <Text style={styles.statLabel}>Members</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Feather name="calendar" size={16} color="#2563EB" />
+            <Feather name="calendar" size={16} color={colors.primary} />
             <Text style={styles.statNumber}>Oct 01</Text>
             <Text style={styles.statLabel}>Start</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Feather name="flag" size={16} color="#2563EB" />
+            <Feather name="flag" size={16} color={colors.primary} />
             <Text style={styles.statNumber}>{project?.dueDate || 'N/A'}</Text>
             <Text style={styles.statLabel}>End</Text>
           </View>
@@ -182,7 +182,7 @@ const ProjectDetails = () => {
             <Feather
               name="plus"
               size={18}
-              color={colors.primary || '#2563EB'}
+              color={colors.primary}
             />
             <Text style={styles.addtxt}>Add Task</Text>
           </TouchableOpacity>
@@ -238,7 +238,7 @@ export default ProjectDetails;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   contentContainer: {
     paddingHorizontal: '4%',
@@ -265,11 +265,11 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontFamily: Fonts.Bold || 'System',
-    color: '#0F172A',
+    color: colors.VeryDarkSlateBlue,
   },
   cardAuthor: {
     fontSize: 14,
-    color: '#94A3B8',
+    color: colors.SlateGrayText,
     marginTop: '1%',
   },
   priorityBadge: {
@@ -292,17 +292,16 @@ const styles = StyleSheet.create({
   },
   progressLabel: {
     fontSize: 14,
-    color: '#64748B',
-    
+    color: colors.MutedSlateGray,
   },
   progressText: {
     fontSize: 14,
-    fontFamily: Fonts.Bold ,
-    color: '#0F172A',
+    fontFamily: Fonts.Bold,
+    color: colors.VeryDarkSlateBlue,
   },
   track: {
     height: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: colors.Slate100,
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -318,7 +317,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: colors.OffWhite,
     borderRadius: 16,
     paddingVertical: '3.5%',
     alignItems: 'center',
@@ -327,20 +326,20 @@ const styles = StyleSheet.create({
   statNumber: {
     fontSize: 14,
     fontFamily: Fonts.Bold,
-    color: '#0F172A',
+    color: colors.VeryDarkSlateBlue,
     marginTop: '5%',
   },
   statLabel: {
     fontSize: 12,
-    color: '#94A3B8',
+    color: colors.SlateGrayText,
     marginTop: '1%',
   },
   tabcontainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
+    borderBottomColor: colors.LightGray,
+    backgroundColor: colors.white,
     marginTop: '5%',
   },
   tabItem: {
@@ -352,17 +351,17 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   activeTabItem: {
-    borderBottomColor: '#2563EB',
+    borderBottomColor: colors.primary,
   },
   tabText: {
     fontSize: 13,
-    fontFamily: Fonts.SemiBold ,
+    fontFamily: Fonts.SemiBold,
   },
   activeTabText: {
-    color: '#2563EB',
+    color: colors.primary,
   },
   inactiveTabText: {
-    color: '#64748B',
+    color: colors.MutedSlateGray,
   },
   addTask: {
     marginTop: '4%',
@@ -373,7 +372,7 @@ const styles = StyleSheet.create({
     paddingVertical: '2.5%',
     borderWidth: 1,
     borderColor: colors.primary,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   addtskbtn: {
     flexDirection: 'row',
@@ -395,10 +394,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: '4%',
     paddingVertical: '3.5%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.LightGray,
     marginBottom: '2.5%',
   },
   cardLeft: {
@@ -419,12 +418,12 @@ const styles = StyleSheet.create({
   taskTitle: {
     fontSize: 12,
     fontFamily: Fonts.Medium,
-    color: '#0F172A',
+    color: colors.VeryDarkSlateBlue,
   },
   taskAuthor: {
     fontSize: 10,
     fontFamily: Fonts.Regular,
-    color: '#6B7280',
+    color: colors.Dargrey,
     marginTop: '1%',
   },
   statusBadge: {

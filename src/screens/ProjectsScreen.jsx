@@ -62,7 +62,7 @@ const ProjectsScreen = () => {
           />
         </View>
       </View>
-      <View>
+      <View style={styles.flatist}>
         <FlatList
           data={PROJECTS_DATA}
           style={styles.flat}
@@ -197,12 +197,14 @@ const styles = StyleSheet.create({
   tabsContainer: {
     paddingTop: '3%',
   },
+  
   flat: {
+    
     paddingVertical: '4%',
   },
   listPadding: {
     paddingHorizontal: '4%',
-    paddingBottom: '40%',
+    paddingBottom: '50%',
   },
   card: {
     backgroundColor: '#FFFFFF',

@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing } from '../constants/spacing';
@@ -19,22 +28,22 @@ import { signInWithGoogle } from '../services/googleSign';
 import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { showSnackbar } from '../redux/slice/snackBarSlice';
+import { ms,s,vs } from 'react-native-size-matters';
+
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const gradientColors = [
-    colors.primary || '#3B82F6',
-    colors.secondary || '#8B5CF6',
-  ];
+  const [loading, setLoading] = useState(false);
+  const gradientColors = [colors.primary, colors.secondary];
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
       Alert.alert('Error', 'Please Enter the email and Password');
       return;
     }
+    setLoading(true);
     try {
       const authInstance = getAuth();
       const db = getFirestore();
@@ -51,16 +60,17 @@ const LoginScreen = () => {
         console.log('Logged in user:', userData);
 
         dispatch(
-      showSnackbar({
-        message: 'Login SuccessFully...',
-        type: 'success',
-      })
-    );
-        navigation.replace('BottomTabs', {
-          screen: 'Home',
-          params: { userData },
-        });
+          showSnackbar({
+            message: 'Login SuccessFully...',
+            type: 'success',
+          }),
+        );
+        // navigation.replace('BottomTabs', {
+        //   screen: 'Home',
+        //   params: { userData },
+        // });
       } else {
+        setLoading(false);
         Alert.alert('Error', 'User profile was not found.');
       }
     } catch (error) {
@@ -97,102 +107,117 @@ const LoginScreen = () => {
       await signInWithGoogle();
     } catch (error) {}
   };
+
   return (
     <SafeAreaView style={styles.main}>
-      <View style={styles.mainContainer}>
-        <View style={styles.firstContainer}>
-          <View style={styles.iconContainer}>
-            <View style={styles.iconWrapper}>
-              <LinearGradient
-                colors={gradientColors}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.card}
-              >
-                <LoginIcon width={36} height={36} />
-              </LinearGradient>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.mainContainer}>
+            <View style={styles.firstContainer}>
+              <View style={styles.iconContainer}>
+                <View style={styles.iconWrapper}>
+                  <LinearGradient
+                    colors={gradientColors}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.card}
+                  >
+                    <LoginIcon width={36} height={36} />
+                  </LinearGradient>
+                </View>
+
+                <View style={styles.headingText}>
+                  <Text style={styles.title}>Welcome Back</Text>
+                  <Text style={styles.subtitle}adjustsFontSizeToFit>
+                    Sign In to Your TaskFlow account
+                  </Text>
+                </View>
+              </View>
             </View>
 
-            <View style={styles.headingText}>
-              <Text style={styles.title}>Welcome Back</Text>
-              <Text style={styles.subtitle}>
-                Sign In to Your TaskFlow account
-              </Text>
+            <View style={styles.formContainer}>
+              <Input
+                id="email-input"
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                placeholder="xyz@gmail.com"
+                icon="mail-outline"
+                placeholderTextColor={colors.black}
+                keyboardType="email-address"
+              />
+              <Input
+                id="password-input"
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                placeholder="********"
+                placeholderTextColor={colors.black}
+                icon="lock-closed-outline"
+                isPassword={true}
+              />
+
+              <View style={styles.forgetContainer}>
+                <TouchableOpacity
+                  style={styles.forget}
+                  activeOpacity={0.7}
+                  onPress={handleForgot}
+                >
+                  <Text style={styles.frgtTxt}>Forgot Password?</Text>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.btnContainer}>
+                <CustomButton title="Sign In" onPress={handleLogin}  loading={loading}/>
+              </View>
+
+              {/* Divider */}
+              <View style={styles.dividerContainer}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              {/* Social Buttons */}
+              <View style={styles.socialContainer}>
+                <TouchableOpacity
+                  style={styles.socialButton}
+                  activeOpacity={0.7}
+                  onPress={handleGooglePress}
+                >
+                  <RedGlobe width={18} height={18} />
+                  <Text style={styles.socialText}>Google</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.socialButton}
+                  activeOpacity={0.7}
+                >
+                  <BlackGlobe width={18} height={18} />
+                  <Text style={styles.socialText}>GitHub</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.createContainer}>
+                <Text style={styles.accountText}>Don't have an account?</Text>
+                <TouchableOpacity
+                  style={styles.create}
+                  activeOpacity={0.7}
+                  onPress={handleCreate}
+                >
+                  <Text style={styles.createTxt}> Create account</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-
-        <View style={styles.formContainer}>
-          <Input
-            id="email-input"
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            placeholder="xyz@gmail.com"
-            icon="mail-outline"
-            placeholderTextColor={colors.black}
-            keyboardType="email-address"
-          />
-          <Input
-            id="password-input"
-            label="Password"
-            value={password}
-            onChangeText={setPassword}
-            placeholder="********"
-            placeholderTextColor={colors.black}
-            icon="lock-closed-outline"
-            isPassword={true}
-          />
-
-          <View style={styles.forgetContainer}>
-            <TouchableOpacity
-              style={styles.forget}
-              activeOpacity={0.7}
-              onPress={handleForgot}
-            >
-              <Text style={styles.frgtTxt}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.btnContainer}>
-            <CustomButton title="Sign In" onPress={handleLogin} />
-          </View>
-
-          {/* Divider */}
-          <View style={styles.dividerContainer}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>or</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          {/* Social Buttons */}
-          <View style={styles.socialContainer}>
-            <TouchableOpacity
-              style={styles.socialButton}
-              activeOpacity={0.7}
-              onPress={handleGooglePress}
-            >
-              <RedGlobe width={18} height={18} />
-              <Text style={styles.socialText}>Google</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialButton} activeOpacity={0.7}>
-              <BlackGlobe width={18} height={18} />
-              <Text style={styles.socialText}>GitHub</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.createContainer}>
-            <Text>Don't have an account?</Text>
-            <TouchableOpacity
-              style={styles.create}
-              activeOpacity={0.7}
-              onPress={handleCreate}
-            >
-              <Text style={styles.createTxt}> Create account</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -201,33 +226,39 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   main: {
-    flex: spacing.flex,
-    paddingHorizontal: '4%',
-    backgroundColor: colors.white || '#FFFFFF',
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: ms(15),
   },
   mainContainer: {
-    flex: spacing.flex,
+    flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
   firstContainer: {
-    width: '100%',
+    width: ms(210),
   },
   iconContainer: {
     alignItems: 'center',
-    paddingTop: '10%',
+    paddingTop: 30,
   },
   iconWrapper: {
-    width: '20%',
-    aspectRatio: 1,
-    marginBottom: '4%',
+    width: 70,
+    aspectRatio: spacing.a,
+    marginBottom: 15,
     backgroundColor: 'transparent',
     borderRadius: 24,
-    boxShadow: '0px 5px 8px 0px rgba(59, 130, 246, 0.7)',
+    boxShadow: colors.btnShadow,
   },
   card: {
-    width: '100%',
-    height: '100%',
+    width: spacing.fullWidth,
+    paddingVertical:20,
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
@@ -240,18 +271,17 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Bold,
     fontSize: 25,
     textAlign: 'center',
+    color: colors.VeryDarkSlateBlue,
   },
   subtitle: {
     fontFamily: Fonts.Regular,
-    fontSize: 13,
-    paddingTop: '1%',
-    color: colors.Dargrey || '#64748B',
+    fontSize: ms(13),
+    color: colors.Dargrey,
     textAlign: 'center',
   },
   formContainer: {
-    width: '100%',
-    paddingHorizontal: '5%',
-    marginTop: '4%',
+    width: spacing.fullWidth,
+    marginTop: vs(10),
   },
   forgetContainer: {
     justifyContent: 'center',
@@ -260,29 +290,29 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   frgtTxt: {
-    color: '#2563EB',
-    fontFamily: Fonts.Medium || 'System',
+    color: colors.primary,
+    fontFamily: Fonts.Medium,
     fontSize: 13,
   },
   btnContainer: {
-    paddingTop: '5%',
+    paddingTop: vs(20),
   },
 
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: '3%',
+    paddingVertical: vs(8),
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: colors.LightGray,
   },
   dividerText: {
-    paddingHorizontal: '4%',
-    color: colors.Dargrey || '#94A3B8',
-    fontFamily: Fonts.Regular || 'System',
+    paddingHorizontal: s(10),
+    color: colors.Dargrey,
+    fontFamily: Fonts.Regular,
     fontSize: 13,
   },
 
@@ -296,35 +326,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderWidth: spacing.a,
+    borderColor: colors.LightGray,
     borderRadius: 24,
-    paddingVertical: '3%',
-    backgroundColor: '#FFFFFF',
+    paddingVertical: vs(9),
+    backgroundColor: colors.white,
   },
   socialText: {
-    marginLeft: '6%',
-    fontFamily: Fonts.Bold || 'System',
+    marginLeft: s(8),
+    fontFamily: Fonts.Bold,
     fontSize: 14,
-    color: '#0F172A',
+    color: colors.VeryDarkSlateBlue,
   },
   createContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '6%',
+    marginTop: vs(15),
   },
   accountText: {
-    fontFamily: Fonts.Regular || 'System',
+    fontFamily: Fonts.Regular,
     fontSize: 13,
-    color: colors.Dargrey || '#64748B',
+    color: colors.Dargrey,
   },
   create: {
-    paddingVertical: '1%',
+    paddingVertical: vs(5),
   },
   createTxt: {
-    color: colors.primary || '#2563EB',
-    fontFamily: Fonts.Bold || 'System',
+    color: colors.primary,
+    fontFamily: Fonts.Bold,
     fontSize: 13,
   },
 });

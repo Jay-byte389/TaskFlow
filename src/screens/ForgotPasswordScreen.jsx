@@ -17,12 +17,10 @@ import ForgotIcon from '../assets/icons/Forgoticon';
 import { Fonts } from '../constants/Fonts';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
-import { getFirestore } from '@react-native-firebase/firestore';
-import { sendOtpEmail } from '../services/emailService';
-import {
-  fetchSignInMethodsForEmail,
-  getAuth,
-} from '@react-native-firebase/auth';
+
+import { getAuth } from '@react-native-firebase/auth';
+import { spacing } from '../constants/spacing';
+import { vs,s } from 'react-native-size-matters';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -138,42 +136,65 @@ const ForgotPasswordScreen = ({ navigation }) => {
 export default ForgotPasswordScreen;
 
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: colors.white },
+  main: {
+    flex: spacing.a,
+    backgroundColor: colors.white,
+  },
   keyboardContainer: {
-    flex: 1,
+    flex: spacing.a,
   },
   scrollContainer: {
-    flexGrow: 1,
+    flexGrow: spacing.a,
   },
   mainContainer: {
-    paddingTop: '8%',
+    paddingTop: vs(40),
     alignItems: 'center',
-    paddingHorizontal: '6%',
+    paddingHorizontal: s(15),
   },
   iconContainer: {
-    width: '30%',
-    aspectRatio: 1,
+    width: s(100),
+    aspectRatio: spacing.a,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  headingContainer: { marginTop: '6%' },
+  headingContainer: {
+    marginTop: vs(15),
+  },
   headingTxt: {
     fontFamily: Fonts.Bold,
     fontSize: 22,
-    color: '#111827',
+    color: colors.black,
     textAlign: 'center',
   },
-  subheading: { paddingTop: '2%', marginBottom: '6%' },
+  subheading: {
+    paddingTop: vs(2),
+    paddingBottom: vs(20),
+  },
   subheadingtxt: {
     textAlign: 'center',
     fontFamily: Fonts.Regular,
     fontSize: 14,
-    color: '#64748B',
+    color: colors.MutedSlateGray,
     lineHeight: 20,
   },
-  formContainer: { width: '100%', paddingTop: '2%' },
-  buttonContainer: { marginTop: '6%' },
-  backToSignBtn: { marginTop: '4%', alignItems: 'center' },
-  backToSignTxt: { fontFamily: Fonts.SemiBold, fontSize: 14, color: '#6B7280' },
-  fbtn: { fontFamily: Fonts.Bold, fontSize: 14 },
+  formContainer: {
+    width: spacing.fullWidth,
+    paddingTop: vs(10),
+  },
+  buttonContainer: {
+    marginTop:vs(8),
+  },
+  backToSignBtn: {
+    marginTop: spacing.four,
+    alignItems: 'center',
+  },
+  backToSignTxt: {
+    fontFamily: Fonts.SemiBold,
+    fontSize: 14,
+    color: colors.Dargrey,
+  },
+  fbtn: {
+    fontFamily: Fonts.Bold,
+    fontSize: 14,
+  },
 });

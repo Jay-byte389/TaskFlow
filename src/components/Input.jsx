@@ -4,6 +4,8 @@ import { colors } from '../constants/colors';
 import { Fonts } from '../constants/Fonts';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
+import { spacing } from '../constants/spacing';
+import { vs } from 'react-native-size-matters';
 export default function Input({
   value,
   icon, // Pass icon name string (e.g. "user", "envelope")
@@ -30,8 +32,8 @@ export default function Input({
           <View style={styles.iconWrapper}>
             <Ionicons
               name={icon} 
-              size={15}
-              color={'#9CA3AF'} 
+              size={18}
+              color={colors.TailwindGray} 
               solid 
             />
           </View>
@@ -58,7 +60,7 @@ export default function Input({
             <Ionicons
               name={showPassword ? 'eye-outline' : 'eye-off-outline'} 
               size={16}
-              color="#94A3B8"
+              color={colors.SlateGrayText}
             />
           </TouchableOpacity>
         )}
@@ -69,42 +71,42 @@ export default function Input({
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    marginBottom: '4%',
+    width: spacing.fullWidth,
+    marginBottom: spacing.four,
   },
   label: {
     fontFamily: Fonts.Bold,
     fontSize: 12,
-    color: '#64748B',
-    marginBottom: '2%',
+    color: colors.MutedSlateGray,
+    marginBottom: spacing.two,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: spacing.aa,
   },
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 12,
-    paddingHorizontal: '4%',
-    paddingVertical: '3.5%',
+    backgroundColor:colors.OffWhite,
+    borderWidth: spacing.a,
+    borderColor: colors.LightGray,
+    borderRadius: 22,
+    paddingHorizontal: spacing.four,
+    paddingVertical: vs(10),
   },
   iconWrapper: {
-    marginRight: '3%',
+    marginRight: spacing.three,
     justifyContent: 'center',
     alignItems: 'center',
   },
   eyeBtn: {
-    paddingLeft: '3%',
+    paddingLeft: spacing.three,
     justifyContent: 'center',
     alignItems: 'center',
   },
   input: {
-    flex: 1,
-    fontSize: 15,
+    flex: spacing.a,
+    fontSize: 14,
     fontFamily: Fonts.Regular,
-    color: '#0F172A',
+    color:colors.black,
     padding: 0,
   },
 });

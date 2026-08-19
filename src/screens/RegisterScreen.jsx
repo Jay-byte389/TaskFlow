@@ -5,8 +5,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   ScrollView,
-  Alert,  Platform,
-
+  Alert,
+  Platform,
 } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -28,6 +28,9 @@ import {
   setDoc,
 } from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import { spacing } from '../constants/spacing';
+import { s, vs, ms } from 'react-native-size-matters';
+
 const RegisterScreen = () => {
   const navigation = useNavigation();
   const [firstName, setFirstName] = useState('');
@@ -38,11 +41,10 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agredTerms, setAgrredTerms] = useState(false);
-  
 
-  const handleSignin=()=>{
+  const handleSignin = () => {
     navigation.navigate("Login");
-  }
+  };
 
   const handleCreate = async () => {
     const authInstance = getAuth();
@@ -113,10 +115,10 @@ const RegisterScreen = () => {
       } else if (error.code === 'auth/weak-password') {
         errorMessage = 'Password should be at least 6 characters.';
       }
-
       Alert.alert('Registration Failed', errorMessage);
     }
   };
+
   return (
     <SafeAreaView style={styles.main}>
       <Header title="Create Account" />
@@ -200,6 +202,7 @@ const RegisterScreen = () => {
               isPassword={true}
               onChangeText={setConfirmPassword}
             />
+
             <View style={styles.lowerContainer}>
               <TouchableOpacity
                 activeOpacity={0.8}
@@ -207,16 +210,18 @@ const RegisterScreen = () => {
                 style={[styles.checkBox, agredTerms && styles.sheckBoxTicked]}
               >
                 {agredTerms && (
-                  <Ionicons name="checkmark" size={13} color="#FFFFFF" />
+                  <Ionicons name="checkmark" size={ms(12)} color={colors.white} />
                 )}
               </TouchableOpacity>
               <Text style={styles.termsText}>
-                I agree to the{''}
+                I agree to the{' '}
                 <Text style={styles.linkText}>Terms Of Service </Text>and{' '}
                 <Text style={styles.linkText}>Privacy Policy</Text>
               </Text>
             </View>
+
             <CustomButton title="Create Account" onPress={handleCreate} />
+
             <View style={styles.signIntextContainer}>
               <Text style={styles.alreadytxt}>Already have an account?</Text>
               <TouchableOpacity style={styles.signinbtn} onPress={handleSignin}>
@@ -234,68 +239,78 @@ export default RegisterScreen;
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    flex: spacing.a,
     backgroundColor: colors.white,
   },
+  keyboardContainer: {
+    flex: spacing.a,
+  },
+  scrollContainer: {
+    flexGrow: spacing.a,
+    paddingBottom: vs(spacing.registerPaddingBottom), // Adds space at bottom so button isn't cut off on small screens
+  },
   formContainer: {
-    paddingHorizontal: '5%',
-    paddingTop: '3%',
+    paddingHorizontal: s(16),
+    paddingTop: vs(8),
+    rowGap: vs(spacing.registerGap), // Tightens vertical spacing between inputs
   },
   namecontainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    width: spacing.fullWidth,
+    gap: s(8), // Replaces width: '48%' with dynamic gap
   },
   halfWidth: {
-    width: '48%',
+    flex: spacing.a, // Lets both inputs share width 50/50 dynamically
   },
   lowerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    paddingVertical: '4%',
-    paddingHorizontal: '5%',
-    borderRadius: 25,
+    backgroundColor: colors.OffWhite,
+    paddingVertical: vs(10),
+    paddingHorizontal: s(12),
+    borderRadius: ms(20),
+    marginVertical: vs(4),
   },
   checkBox: {
-    width: '7%',
-    aspectRatio: 1,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    backgroundColor: '#FFFFFF',
+    width: s(20),
+    height: s(20),
+    borderRadius: ms(spacing.checkBoxRadius),
+    borderWidth: spacing.a,
+    borderColor: colors.LightSlateGray,
+    backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: '4%',
+    marginRight: s(10),
   },
   sheckBoxTicked: {
-    backgroundColor: '#2563EB',
-    borderColor: '#2563EB',
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   termsText: {
-    fontSize: 11,
-    color: '#64748B',
-    flex: 1,
+    fontSize: ms(11),
+    color: colors.MutedSlateGray,
+    flex: spacing.a,
   },
   linkText: {
-    color: '#2563EB',
+    color: colors.primary,
     fontWeight: '600',
   },
   signIntextContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
+    marginTop: vs(8),
   },
   alreadytxt: {
     fontFamily: Fonts.Regular,
-    fontSize: 14,
+    fontSize: ms(13),
   },
   signinbtn: {
-    marginHorizontal: '2%',
+    marginHorizontal: s(4),
   },
   signtxt: {
     color: colors.primary,
     fontFamily: Fonts.Regular,
-    fontSize: 14,
+    fontSize: ms(13),
   },
 });

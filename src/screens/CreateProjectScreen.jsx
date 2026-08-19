@@ -5,6 +5,7 @@ import {
   ScrollView,
   Platform,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import React, { useState } from 'react';
 import ProjectHeader from '../components/ProjectsHeaer';
@@ -34,91 +35,100 @@ const CreateProjectScreen = () => {
   const [activeTab, setActiveTab] = useState('Low');
   const [status, setStatus] = useState('');
   const [manager, setManager] = useState('');
-  const [projectName,setProjectName]=useState('');
-  const [desc,setDesc]=useState('');
-  const [startDate,setStartDate]=useState(new Date());
-  const [endDate,setEndDate]=useState(new Date());
-  const [priority,setPriority]=useState("Low");
-  const [teamMembers,setTeamMembers]=useState([]);
+  const [projectName, setProjectName] = useState('');
+  const [desc, setDesc] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [priority, setPriority] = useState('Low');
+  const [teamMembers, setTeamMembers] = useState([]);
 
-  const handleAddUser =()=>{
-    
-  }
+  const handleAddUser = () => {};
 
-  const handleCreate =()=>{
-
-  }
+  const handleCreate = () => {};
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.main}>
-        <ProjectHeader showBack title="New Project" />
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.main}>
+          <ProjectHeader showBack title="New Project" />
 
-        <ScrollView
-          contentContainerStyle={styles.formContainer}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          nestedScrollEnabled={true}
-        >
-          <Input
-            label="project Name"
-            icon="briefcase-outline"
-            placeholder="Enter Project Name"
-            placeholderTextColor={colors.Dargrey}
-          />
-
-          <Input
-            label="Description"
-            placeholder="Project Description...."
-            placeholderTextColor={colors.Dargrey}
-          />
-          <DateRangePicker />
-          <View style={styles.tabSwitchContainer}>
-            <Text style={styles.tabswitchertext}>PRIORITY</Text>
-            <TabSwitcher
-              tabs={['Low', 'Medium', 'High', 'Critical']}
-              activeTab={priority}
-              onTabChange={tab => setPriority(tab)}
-              style={styles.tabSwitcher}
-              pillstyle={styles.pill}
-            />
-          </View>
-          <View style={styles.dropdownContainer}>
-            <DropDown
-              headingtxt="STATUS"
-              placeholder="Select status"
-              items={STATUS_DATA}
-              value={status}
-              onSelect={setStatus}
-              zIndex={5000}
+          <ScrollView
+            contentContainerStyle={styles.formContainer}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+          >
+            <Input
+              label="project Name"
+              icon="briefcase-outline"
+              placeholder="Enter Project Name"
+              placeholderTextColor={colors.Dargrey}
             />
 
-            <DropDown
-              headingtxt="PROJECT MANAGER"
-              placeholder="Select manager"
-              items={Manager_Data}
-              value={manager}
-              onSelect={setManager}
-              zIndex={4000}
+            <Input
+              label="Description"
+              placeholder="Project Description...."
+              placeholderTextColor={colors.Dargrey}
             />
-            
-            {/* Perfectly Aligned Bottom Section */}
-            <View style={styles.addMemberContainer}>
-              <Text style={styles.teammmbrtxt}>TEAM MEMBERS</Text>
-              <TouchableOpacity style={styles.addMemberbtn} activeOpacity={0.7} onPress={handleAddUser}>
-                <View style={styles.nameAndicon}>
-                  <Icon name="person-add-outline" size={15} color={colors.primary} />
-                  <Text style={styles.txt}>Add Members</Text>
-                </View>
-              </TouchableOpacity>
+            <DateRangePicker />
+            <View style={styles.tabSwitchContainer}>
+              <Text style={styles.tabswitchertext}>PRIORITY</Text>
+              <TabSwitcher
+                tabs={['Low', 'Medium', 'High', 'Critical']}
+                activeTab={priority}
+                onTabChange={tab => setPriority(tab)}
+                style={styles.tabSwitcher}
+                pillstyle={styles.pill}
+              />
             </View>
+            <View style={styles.dropdownContainer}>
+              <DropDown
+                headingtxt="STATUS"
+                placeholder="Select status"
+                items={STATUS_DATA}
+                value={status}
+                onSelect={setStatus}
+                zIndex={5000}
+              />
 
-            <View style={styles.buttonWrapper}>
-              <CustomButton title="Create Project" onPress={handleCreate} />
+              <DropDown
+                headingtxt="PROJECT MANAGER"
+                placeholder="Select manager"
+                items={Manager_Data}
+                value={manager}
+                onSelect={setManager}
+                zIndex={4000}
+              />
+
+              {/* Perfectly Aligned Bottom Section */}
+              <View style={styles.addMemberContainer}>
+                <Text style={styles.teammmbrtxt}>TEAM MEMBERS</Text>
+                <TouchableOpacity
+                  style={styles.addMemberbtn}
+                  activeOpacity={0.7}
+                  onPress={handleAddUser}
+                >
+                  <View style={styles.nameAndicon}>
+                    <Icon
+                      name="person-add-outline"
+                      size={15}
+                      color={colors.primary}
+                    />
+                    <Text style={styles.txt}>Add Members</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.buttonWrapper}>
+                <CustomButton title="Create Project" onPress={handleCreate} />
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -129,6 +139,9 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  keyboardView: {
+    flex: 1,
   },
   main: {
     flex: 1,
@@ -160,7 +173,7 @@ const styles = StyleSheet.create({
   pill: {
     paddingHorizontal: '8%',
   },
-  
+
   addMemberContainer: {
     width: '100%',
     marginVertical: '4%',
@@ -187,13 +200,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    columnGap: '4%', 
+    columnGap: '4%',
   },
   txt: {
     color: colors.primary,
-    fontFamily: Fonts.SemiBold ,
+    fontFamily: Fonts.SemiBold,
     fontSize: 13,
-    includeFontPadding: false, 
+    includeFontPadding: false,
     textAlignVertical: 'center',
   },
   buttonWrapper: {

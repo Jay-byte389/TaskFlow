@@ -7,10 +7,12 @@ import ProjectsScreen from '../screens/ProjectsScreen';
 import TaskScreen from '../screens/TaskScreen';
 import TeamScreen from '../screens/TeamScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-
+  const insets =useSafeAreaInsets();
   const [isFocused,setisFocused]= useState(false);
   return (
     <Tab.Navigator
@@ -18,15 +20,21 @@ const BottomTabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#2260FF',
-        tabBarInactiveTintColor: '#A8B0BE',
-      }}
+        tabBarInactiveTintColor: '#A8B0BE', 
+        tabBarStyle: {
+            height: Platform.OS=='android' ? 50+ insets.bottom :60,
+             paddingBottom:10     // Increases height to accommodate the extra padding
+        },
+      }
+      
+    }
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={"#9CA3AF"} />
+            <Ionicons name="home-outline" size={25} color={"#9CA3AF"} />
           ),
         }}
       />
@@ -35,8 +43,8 @@ const BottomTabNavigator = () => {
         name="Projects"
         component={ProjectsScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="folder-open-outline" size={size} color={"#9CA3AF"} />
+          tabBarIcon: () => (
+            <Ionicons name="folder-open-outline" size={25} color={"#9CA3AF"} />
           ),
         }}
       />

@@ -1,8 +1,34 @@
-export const colors ={
-    primary:"#2563EB",
-    secondary:"#7C3AED",
-    subHeading:"#FFFFFFB3",
-    white:"#FFFFFF",
-    Dargrey:"#6B7280",
-    black:"#111827",
-}
+export const colors = {
+  primary: '#2563EB',
+  secondary: '#7C3AED',
+  subHeading: '#FFFFFFB3',
+  white: '#FFFFFF',
+  Dargrey: '#6B7280',
+  black: '#111827',
+  LightSlateGray: '#CBD5E1',
+  MutedSlateGray: '#64748B',
+  OffWhite: '#F8FAFC',
+  btnShadow: '0px 5px 8px 0px rgba(59, 130, 246, 0.7)',
+  LightGray: '#E2E8F0',
+  VeryDarkSlateBlue: '#0F172A',
+
+  // UI Icon, Badge & Priority Colors
+  Slate100: '#F1F5F9',
+  SlateGrayText: '#94A3B8',
+  DarkSlate: '#1E293B',
+  IndigoIconBg: '#EEF2FF',
+  IndigoIcon: '#4F46E5',
+  PurpleIconBg: '#F3E8FF',
+  PurpleIcon: '#9333EA',
+  TailwindGray:'#9CA3AF',
+  // Status, Alert & Button Accent Tones
+  CriticalRedBg: '#FEE2E2',
+  CriticalRedBorder: '#FCA5A5',
+  CriticalRedText: '#EF4444',
+  HighAmberBg: '#FEF3C7',
+  HighAmberText: '#D97706',
+  MediumBlueBg: '#E0F2FE',
+  MediumBlueText: '#0284C7',
+  LowGreenBg: '#DCFCE7',
+  LowGreenText: '#16A34A',
+};
