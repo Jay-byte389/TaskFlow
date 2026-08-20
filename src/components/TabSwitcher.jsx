@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Fonts } from '../constants/Fonts';
+import { typography } from '../constants/typography';
 
 const TabSwitcher = ({
   tabs = [], // Array of tab strings passed from parent screen
   activeTab, // Currently active tab name
   onTabChange, // Callback function when a tab is pressed
   style,
-  pillstyle
+  pillstyle,
+  inactivepill
 }) => {
   return (
     <View style={[styles.container,style]}>
@@ -23,7 +25,7 @@ const TabSwitcher = ({
               key={tab}
               style={[
                 styles.pill,pillstyle,
-                isActive ? styles.activePill : styles.inactivePill,
+                isActive ? styles.activePill : styles.inactivePill,inactivepill,
               ]}
               activeOpacity={0.7}
               onPress={() => onTabChange && onTabChange(tab)}
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
   },
   pillText: {
-    fontSize: 13,
+    fontSize: typography.lg,
     fontFamily: Fonts.SemiBold,
     color:"#6B7280"
   },

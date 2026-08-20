@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontFamily: Fonts.ExtraBold,
-    fontSize: ms(typography.heading || 28),
+    fontSize: ms(typography.heading),
     color: colors.white,
     lineHeight: spacing.LH,
     textAlign: 'center',
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     color: colors.subHeading,
     textAlign: 'center',
     fontFamily: Fonts.Medium,
-    fontSize: ms(typography.subheading || 14),
+    fontSize: ms(typography.subheading),
     paddingTop: spacing.subheadingTop,
   },
 });

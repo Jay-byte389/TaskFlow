@@ -11,30 +11,42 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import TabSwitcher from '../components/TabSwitcher';
-import { PROJECTS_DATA } from '../utils/ProjectsData';
+import { getPriorityStyle, getStatusStyleProj, PROJECTS_DATA } from '../utils/ProjectsData';
 import { Fonts } from '../constants/Fonts';
+import { spacing } from '../constants/spacing';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import CustomButton from '../components/CustomButton';
+
+
+
 const ProjectsScreen = () => {
   const [activeTab, setActiveTab] = useState('All');
   const navigation = useNavigation();
-  
+
   const handleNext = () => {
     navigation.navigate('CreateProject');
   };
-
-  const getPriorityStyle = priority => {
-    switch (priority) {
-      case 'Critical':
-        return { bg: '#FEE2E2', text: '#EF4444' };
-      case 'High':
-        return { bg: '#FEF3C7', text: '#D97706' };
-      case 'Medium':
-        return { bg: '#E0F2FE', text: '#0284C7' };
-      case 'Low':
-        return { bg: '#DCFCE7', text: '#16A34A' };
-      default:
-        return { bg: '#F1F5F9', text: '#64748B' };
-    }
+  const handleCreateProject = () => {
+    navigation.navigate('CreateProject');
   };
+
+
+  
+
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <View style={styles.emptyIconBox}>
+        <Feather name="folder-minus" size={32} color={colors.MutedSlateGray} />
+      </View>
+      <Text style={styles.emptyTitle}>No Active Projects</Text>
+      <Text style={styles.emptySubtitle}>
+        You don't have any active projects right now. Create a new one to get
+        started!
+      </Text>
+      <CustomButton title="Create Project" onPress={handleCreateProject} />
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -50,7 +62,7 @@ const ProjectsScreen = () => {
       <View style={styles.searchMain}>
         <TouchableOpacity style={styles.searchContainer}>
           <View style={styles.iconContainer}>
-            <Feather name="search" size={16} color="#9CA3AF" />
+            <Feather name="search" size={spacing.msixteen} color={colors.TailwindGray} />
           </View>
           <Text style={styles.searchTxt}>Search projects.....</Text>
         </TouchableOpacity>
@@ -62,106 +74,124 @@ const ProjectsScreen = () => {
           />
         </View>
       </View>
+     
       <View style={styles.flatist}>
         <FlatList
           data={PROJECTS_DATA}
           style={styles.flat}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listPadding}
+          ListEmptyComponent={renderEmptyState}
           renderItem={({ item }) => {
-            {
-              const priorityStyle = getPriorityStyle(item.priority);
+            const priorityStyle = getPriorityStyle(item.priority);
+            const statusStyle = getStatusStyleProj(item.status);
 
-              return (
-                <TouchableOpacity
-                  style={styles.card}
-                  activeOpacity={0.7}
-                  onPress={() =>
-                    navigation.navigate('ProjectDetails', { project: item })
-                  }
-                >
-                  {/* Header Row: Title & Priority */}
-                  <View style={styles.cardHeader}>
-                    <View style={styles.titleGroup}>
-                      <View
-                        style={[
-                          styles.folderIconBg,
-                          { backgroundColor: `${item.themeColor}15` },
-                        ]}
-                      >
-                        <Feather
-                          name="folder"
-                          size={20}
-                          color={item.themeColor}
-                        />
-                      </View>
-                      <View>
-                        <Text style={styles.cardTitle}>{item.title}</Text>
-                        <Text style={styles.cardAuthor}>{item.author}</Text>
-                      </View>
-                    </View>
-
+            return (
+              <TouchableOpacity
+                style={styles.card}
+                activeOpacity={0.7}
+                onPress={() =>
+                  navigation.navigate('ProjectDetails', { project: item })
+                }
+              >
+                {/* Header Row: Title & Priority */}
+                <View style={styles.cardHeader}>
+                  <View style={styles.titleGroup}>
                     <View
                       style={[
-                        styles.priorityBadge,
-                        { backgroundColor: priorityStyle.bg },
+                        styles.folderIconBg,
+                        { backgroundColor: `${item.themeColor}15` },
                       ]}
                     >
-                      <Text
-                        style={[
-                          styles.priorityText,
-                          { color: priorityStyle.text },
-                        ]}
-                      >
-                        {item.priority}
-                      </Text>
-                    </View>
-                  </View>
-
-                  {/* Meta Data Row: Tasks, Members, Due Date, Status */}
-                  <View style={styles.metaRow}>
-                    <View style={styles.metaLeft}>
-                      <View style={styles.metaItem}>
-                        <Feather
-                          name="check-square"
-                          size={13}
-                          color="#64748B"
-                        />
-                        <Text style={styles.metaText}>{item.tasksCount}</Text>
-                      </View>
-                      <View style={styles.metaItem}>
-                        <Feather name="users" size={13} color="#64748B" />
-                        <Text style={styles.metaText}>{item.membersCount}</Text>
-                      </View>
-                      <View style={styles.metaItem}>
-                        <Feather name="calendar" size={13} color="#64748B" />
-                        <Text style={styles.metaText}>{item.dueDate}</Text>
-                      </View>
-                    </View>
-
-                    <View style={styles.statusBadge}>
-                      <Text style={styles.statusText}>{item.status}</Text>
-                    </View>
-                  </View>
-
-                  {/* Progress Bar Row */}
-                  <View style={styles.progressRow}>
-                    <View style={styles.track}>
-                      <View
-                        style={[
-                          styles.fill,
-                          {
-                            width: `${item.progress}%`,
-                            backgroundColor: item.themeColor,
-                          },
-                        ]}
+                      <Feather
+                        name="folder"
+                        size={spacing.mtwenty}
+                        color={item.themeColor}
                       />
                     </View>
-                    <Text style={styles.progressText}>{item.progress}%</Text>
+                    <View>
+                      <Text style={styles.cardTitle}>{item.title}</Text>
+                      <Text style={styles.cardAuthor}>{item.author}</Text>
+                    </View>
                   </View>
-                </TouchableOpacity>
-              );
-            }
+
+                  <View
+                    style={[
+                      styles.priorityBadge,
+                      { backgroundColor: priorityStyle.bg },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.priorityText,
+                        { color: priorityStyle.text },
+                      ]}
+                    >
+                      {item.priority}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Meta Data Row: Tasks, Members, Due Date, Status */}
+                <View style={styles.metaRow}>
+                  <View style={styles.metaLeft}>
+                    <View style={styles.metaItem}>
+                      <Feather
+                        name="check-square"
+                        size={spacing.mthirteen}
+                        color={colors.MutedSlateGray}
+                      />
+                      <Text style={styles.metaText}>{item.tasksCount}</Text>
+                    </View>
+                    <View style={styles.metaItem}>
+                      <Feather
+                        name="users"
+                        size={spacing.mthirteen}
+                        color={colors.MutedSlateGray}
+                      />
+                      <Text style={styles.metaText}>{item.membersCount}</Text>
+                    </View>
+                    <View style={styles.metaItem}>
+                      <Feather
+                        name="calendar"
+                        size={spacing.mthirteen}
+                        color={colors.MutedSlateGray}
+                      />
+                      <Text style={styles.metaText}>{item.dueDate}</Text>
+                    </View>
+                  </View>
+
+                  <View
+                    style={[
+                      styles.statusBadge,
+                      { backgroundColor: statusStyle.bg },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.statusText, { color: statusStyle.text }]}
+                    >
+                      {item.status}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Progress Bar Row */}
+                <View style={styles.progressRow}>
+                  <View style={styles.track}>
+                    <View
+                      style={[
+                        styles.fill,
+                        {
+                          width: `${item.progress}%`,
+                          backgroundColor: item.themeColor,
+                        },
+                      ]}
+                    />
+                  </View>
+                  <Text style={styles.progressText}>{item.progress}%</Text>
+                </View>
+              </TouchableOpacity>
+            );
           }}
         />
       </View>
@@ -173,134 +203,174 @@ export default ProjectsScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
+    flex: spacing.a,
   },
   searchMain: {
-    paddingVertical: '2%',
-    paddingHorizontal: '4%',
-    backgroundColor: '#FFFFFF',
+    paddingVertical: spacing.veight,
+    paddingHorizontal: spacing.hsixteen,
+    backgroundColor: colors.white,
   },
   searchContainer: {
-    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    paddingHorizontal: '2%',
-    backgroundColor: '#E2E8F0',
-    paddingVertical: '4%',
-    borderRadius: 20,
+    paddingHorizontal: spacing.heights,
+    backgroundColor: colors.LightGray,
+    paddingVertical: spacing.vtewlve,
+    borderRadius: spacing.mtwenty,
   },
   searchTxt: {
-    color: '#111827',
-    bottom: '10%',
-    paddingHorizontal: '3%',
+    color: colors.black,
+    fontFamily: Fonts.Regular,
+    fontSize: typography.xl,
+    paddingHorizontal: spacing.htwelve,
   },
   tabsContainer: {
-    paddingTop: '3%',
+    paddingTop: spacing.vtewlve,
   },
-  
+  flatist: {
+    flex: spacing.a,
+  },
   flat: {
-    
-    paddingVertical: '4%',
+    paddingTop: spacing.hfive,
+    paddingHorizontal: spacing.hsixteen,
+    marginBottom: spacing.hten,
   },
   listPadding: {
-    paddingHorizontal: '4%',
-    paddingBottom: '50%',
+    paddingTop: spacing.vtewlve,
+    paddingBottom: spacing.vforty,
   },
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 14,
-    borderWidth: 1,
-    borderColor: '#F1F5F9',
+    backgroundColor: colors.white,
+    borderRadius: spacing.msixteen,
+    padding: spacing.hsixteen,
+    marginBottom: spacing.veight,
+    borderWidth: spacing.borderThin,
+    borderColor: colors.Slate100,
   },
   cardHeader: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'flex-start',
   },
   titleGroup: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.htwelve,
   },
   folderIconBg: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
+    width: spacing.hfortyFour,
+    height: spacing.hfortyFour,
+    borderRadius: spacing.mtwentyTwo,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cardTitle: {
-    fontSize: 16,
-    fontFamily: Fonts.Bold,
-    color: '#0F172A',
+    fontSize: typography.xl,
+    fontFamily: Fonts.SemiBold,
+    color:colors.black,
   },
   cardAuthor: {
-    fontSize: 13,
-    color: '#94A3B8',
-    marginTop: 2,
+    fontSize: spacing.meleven,
+    fontFamily: Fonts.Regular,
+    color:colors.SlateGrayText,
+    marginTop: spacing.vtwo,
   },
   priorityBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    marginTop: spacing.vfour,
+    paddingHorizontal: spacing.hten,
+    paddingVertical: spacing.vfour,
+    borderRadius: spacing.mtwelve,
   },
   priorityText: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontFamily: Fonts.SemiBold,
+    fontSize: typography.m,
   },
   metaRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: spacing.veight,
   },
   metaLeft: {
+    flex: 1,
     flexDirection: 'row',
-    gap: 12,
+    gap: spacing.htwelve,
   },
   metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: spacing.hfour,
   },
   metaText: {
-    fontSize: 12,
-    color: '#64748B',
+    fontSize: typography.m,
+    fontFamily: Fonts.Regular,
+    color: colors.MutedSlateGray,
     fontWeight: '600',
   },
   statusBadge: {
-    backgroundColor: '#F1F5F9',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    backgroundColor: colors.Slate100,
+    paddingHorizontal: spacing.hten,
+    paddingVertical: spacing.vfour,
+    borderRadius: spacing.mtwelve,
   },
   statusText: {
-    fontSize: 12,
+    fontSize: typography.m,
+    fontFamily: Fonts.SemiBold,
     color: '#475569',
-    fontWeight: '600',
   },
   progressRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    marginTop: 14,
+    gap: spacing.hten,
+    marginTop: spacing.vseven,
   },
   track: {
-    flex: 1,
-    height: 6,
-    backgroundColor: '#F1F5F9',
-    borderRadius: 3,
+    flex: spacing.a,
+    height: spacing.vsix,
+    backgroundColor: colors.Slate100,
+    borderRadius: spacing.vthree,
     overflow: 'hidden',
   },
   fill: {
-    height: '100%',
-    borderRadius: 3,
+    height: spacing.fullWidth,
+    borderRadius: spacing.vthree,
   },
   progressText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#0F172A',
+    fontSize: typography.lg,
+    fontFamily: Fonts.Bold,
+    color: colors.black,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justify: 'center',
+    paddingVertical: spacing.vthirty,
+    paddingHorizontal: spacing.fifteen,
+    marginBottom: spacing.vforty,
+  },
+  emptyIconBox: {
+    width: spacing.hfortyEight,
+    height: spacing.hfortyEight,
+    borderRadius: spacing.meighteen,
+    backgroundColor: colors.Slate100,
+    alignItems: 'center',
+    justify: 'center',
+    marginBottom: spacing.vtewlve,
+  },
+  emptyTitle: {
+    fontSize: typography.xxl,
+    fontFamily: Fonts.Bold,
+    color: colors.VeryDarkSlateBlue,
+    marginBottom: spacing.vfour,
+  },
+  emptySubtitle: {
+    fontSize: typography.lg,
+    fontFamily: Fonts.Regular,
+    color: colors.MutedSlateGray,
+    textAlign: 'center',
+    lineHeight: spacing.lhTwenty,
   },
 });

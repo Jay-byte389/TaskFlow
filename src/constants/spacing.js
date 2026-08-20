@@ -1,41 +1,128 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { Dimensions } from 'react-native';
+import { s, vs, ms } from 'react-native-size-matters';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-// 390 is your design baseline width (e.g., iPhone 13/14)
-const scale = (size) => (SCREEN_WIDTH / 390) * size;
+// 390 is design baseline width (e.g., iPhone 13/14)
 
 export const spacing = {
-  fullWidth: "100%",
-  eightyWidth: "80%",
+  fullWidth: '100%',
+  eightyWidth: '80%',
+  halfWidth: '48%',
   bottom: -40,
   LH: 32,
   ms: 5,
   a: 1,
   s: 30,
+
   // OnBoardingScreen specific
   aa: 0.5,
   pdH: 20,
   brd: 28,
-  one: "1%",
-  two: "2%",
-  three: "3%",
-  four: "4%",
-  five: "5%",
-  six: "6%",
-  seven: "7%",
-  eight: "8%",
-  nine: "9%",
-  // Note: 's' was defined twice in your original object, keeping your original '10%' string:
-  // s: "10%",
+  one: '1%',
+  two: '2%',
+  three: '3%',
+  four: '4%',
+  five: '5%',
+  six: '6%',
+  seven: '7%',
+  eight: '8%',
+  nine: '9%',
 
-  m: "20%",
-  lg: "30%",
-  halfWidth: '48%',
-
-  xx: scale(7.36),
+  m: '20%',
+  lg: '30%',
 
   splashIconSize: 150,
   splashMarginBottom: -40,
   subheadingTop: 0,
+
+  // Horizontal Spacing & Widths
+  hthree: s(3),
+  hfour: s(4),
+  hfive: s(5),
+  hsix: s(6),
+  hseven: s(7),
+  heights: s(8),
+  hten: s(10),
+  htwelve: s(12),
+  hfourteen: s(14),
+  fifteen: s(15),
+  hsixteen: s(16),
+  hEighteen: s(18),
+  htwenty: s(20),
+  hTwentyFive: s(25),
+  hTwentyEight: s(28),
+  hthirtySix: s(36),
+  hforty: s(40),
+  hfortyOne: s(41),
+  hfourtytwo: s(42),
+  hfortyFour: s(44),
+  hfortyEight: s(48),
+  hFifty: s(50),
+  hSeventy: s(70),
+  hEighty: s(80),
+  hOneHundred: s(100),
+  hOneFiftyFive: s(155),
+  hTwoTen: s(210),
+
+  // Vertical Spacing & Heights
+  vonePointTwo: vs(1.2),
+  vone:vs(1),
+  vtwo: vs(2),
+  vtwoPointFive: vs(2.5),
+  vthree: vs(3),
+  vthreePointFive: vs(3.5),
+  vfour: vs(4),
+  vfive: vs(5),
+  vsix: vs(6),
+  vseven: vs(7),
+  veight: vs(8),
+  vnine: vs(9),
+  vten: vs(10),
+  vEleven: vs(11),
+  vtewlve: vs(12),
+  vfourteen: vs(14),
+  vfifteen: vs(15),
+  vsixteen: vs(16),
+  vtwenty: vs(20),
+  vtwentyFour: vs(24),
+  vthirty: vs(30),
+  vforty: vs(40),
+  vOneHundred: vs(100),
+  registerGap: vs(12),
+  registerPaddingBottom: vs(24),
+  Onboarding: vs(180),
+  vfifty:vs(50),
+  // Typography & Line Heights
+  lhTwenty: 20,
+
+  // Border Radius & Moderate Scale
+  mthreePointFive: ms(3.5),
+  mfour: ms(4),
+  msix: ms(6),
+  meight: ms(8),
+  mten: ms(10),
+  meleven: ms(11),
+  mtwelve: ms(12),
+  mthirteen: ms(13),
+  mfourteen: ms(14),
+  mfifteen: ms(15),
+  msixteen: ms(16),
+  meighteen: ms(18),
+  mtwenty: ms(20),
+  btewntyone: ms(21),
+  mtwentyTwo: ms(22),
+  mtwentyFour: ms(24),
+  mtwentyFive: ms(25),
+  mTwentyEight: ms(28),
+  checkBoxRadius: ms(6),
+
+  // Border Widths
+  borderThin: 1,
+  borderThick: 2.5,
+
+  // Dropdown & Layering zIndex Values
+  zIndexBase: 1,
+  zIndexHigh: 4000,
+  zIndexMax: 5000,
 };

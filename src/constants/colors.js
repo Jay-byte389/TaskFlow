@@ -31,4 +31,8 @@ export const colors = {
   MediumBlueText: '#0284C7',
   LowGreenBg: '#DCFCE7',
   LowGreenText: '#16A34A',
+  success:"#4CAF50",
+  error:"#FF4D4F",
+  default:"#FFA500",
+  theme:"#F59E0B"
 };

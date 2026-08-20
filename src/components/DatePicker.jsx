@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { View, TextInput, Pressable, Text, StyleSheet, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
+import { Fonts } from '../constants/Fonts';
 
 // 1. Create a reusable component for each date input field
 const DateInputField = ({ label, value, onValueChange, placeholder }) => {
@@ -43,7 +46,7 @@ const DateInputField = ({ label, value, onValueChange, placeholder }) => {
 
       {show && (
         <DateTimePicker
-          value={value || new Date()} // Fallback if no date is set
+          value={value || new Date()} 
           mode="date"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           onChange={onChange}
@@ -80,27 +83,27 @@ export default function DateRangePicker() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: 'row', // Align pickers horizontally
-    gap: 16, // Space between pickers
+    flexDirection: 'row', 
+    gap: 16, 
     paddingVertical:"3%",
-    backgroundColor: '#F8FAFC', // Match the light background
+    backgroundColor:colors.white, 
   },
   inputFlexItem: {
-    flex: 1, // Make each picker take up equal width
+    flex: 1, 
   },
   label: {
-    fontSize: 12,
-    color: '#8E99A6',
-    fontWeight: '600',
+    fontSize: typography.m,
+    fontFamily:Fonts.SemiBold,
+    color: colors.Dargrey,
     marginBottom: "4%" 
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor:colors.white,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 25, // Capsule shape from original image
+    borderColor:colors.OffWhite,
+    borderRadius: 25, 
     paddingHorizontal: 16,
     height: 44,
   },
@@ -108,9 +111,10 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   input: {
-    flex: 1, // Allow input to fill space after icon
-    fontSize: 16,
-    color: '#5B6871', // Standard text color
+    flex: 1, 
+    fontSize: typography.xl,
+    fontFamily:Fonts.Regular,
+    color: colors.Dargrey, 
     fontWeight: '500',
     padding: 0,
   },

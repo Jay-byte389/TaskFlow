@@ -2,13 +2,14 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react';
 import { colors } from '../constants/colors';
 import { Fonts } from '../constants/Fonts';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import { spacing } from '../constants/spacing';
+import { typography } from '../constants/typography';
 import { vs } from 'react-native-size-matters';
+
 export default function Input({
   value,
-  icon, // Pass icon name string (e.g. "user", "envelope")
+  icon,
   label,
   onChangeText,
   placeholder,
@@ -17,24 +18,30 @@ export default function Input({
   secureTextEntry,
   containerStyle,
   isPassword = false,
+  numberofLines, // Handles legacy typo if passed
+  numberOfLines,  // Standard React Native prop
+  multiline,
   ...props
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const isSecure = isPassword ? !showPassword : secureTextEntry;
 
+  // Determine line count and multiline mode
+  const lines = numberOfLines || numberofLines || 1;
+  const isMultiline = multiline || lines > 1;
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View style={styles.inputWrapper}>
+      <View style={[styles.inputWrapper, isMultiline && styles.multilineWrapper]}>
         
         {icon && (
-          <View style={styles.iconWrapper}>
+          <View style={[styles.iconWrapper, isMultiline && styles.multilineIcon]}>
             <Ionicons
               name={icon} 
               size={18}
               color={colors.TailwindGray} 
-              solid 
             />
           </View>
         )}
@@ -42,12 +49,15 @@ export default function Input({
         <TextInput
           key={isPassword ? (showPassword ? 'text' : 'password') : 'input'} 
           value={value}
-          style={styles.input}
+          style={[styles.input, isMultiline && { height: vs(20 * lines), minHeight: vs(50) }]}
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor}
           keyboardType={keyboardType}
           secureTextEntry={isSecure}
+          multiline={isMultiline}
+          numberOfLines={lines}
+          textAlignVertical={isMultiline ? 'top' : 'center'}
           {...props}
         />
 
@@ -75,8 +85,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.four,
   },
   label: {
-    fontFamily: Fonts.Bold,
-    fontSize: 12,
+    fontFamily: Fonts.SemiBold,
+    fontSize: typography.m,
     color: colors.MutedSlateGray,
     marginBottom: spacing.two,
     textTransform: 'uppercase',
@@ -85,28 +95,34 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:colors.OffWhite,
-    borderWidth: spacing.a,
+    backgroundColor: colors.OffWhite,
+    borderWidth: spacing.borderThin,
     borderColor: colors.LightGray,
-    borderRadius: 22,
+    borderRadius: spacing.mtwentyTwo,
     paddingHorizontal: spacing.four,
     paddingVertical: vs(10),
+  },
+  multilineWrapper: {
+    alignItems: 'flex-start', // Allows input to stretch vertically
   },
   iconWrapper: {
     marginRight: spacing.three,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  multilineIcon: {
+    marginTop: vs(4),
+  },
   eyeBtn: {
     paddingLeft: spacing.three,
-    justifyContent: 'center',
+    justify: 'center',
     alignItems: 'center',
   },
   input: {
     flex: spacing.a,
-    fontSize: 14,
+    fontSize: typography.lg,
     fontFamily: Fonts.Regular,
-    color:colors.black,
+    color: colors.black,
     padding: 0,
   },
 });

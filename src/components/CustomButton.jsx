@@ -12,7 +12,7 @@ export default function CustomButton({
   disabled = false,
   style,
   textStyle,
-  disabledtxt
+  disabledtxt,button
 }) {
   return (
     <TouchableOpacity
@@ -20,7 +20,7 @@ export default function CustomButton({
       onPress={onPress}
       disabled={disabled || loading}
       style={[
-        styles.button,
+        styles.button,button,
         disabled && styles.disabledButton,
         style,
       ]}

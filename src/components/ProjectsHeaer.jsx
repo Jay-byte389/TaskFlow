@@ -12,7 +12,7 @@ const Header = ({
   onRightPress,
   RightIconComponent = Ionicons,
   isMainScreen = false,
-  isDestructive = false, // Set true for red action buttons (e.g. Trash/Delete)
+  isDestructive = false, // Set true for red action buttons 
 }) => {
   const navigation = useNavigation();
 

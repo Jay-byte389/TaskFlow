@@ -13,7 +13,13 @@ import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Fonts } from '../constants/Fonts';
 import { colors } from '../constants/colors';
-import { Mobile_AppDesign } from '../utils/ProjectsData';
+import {
+  getPriorityStyle,
+  getStatusStyle,
+  Mobile_AppDesign,
+} from '../utils/ProjectsData';
+import { spacing } from '../constants/spacing';
+import { typography } from '../constants/typography';
 
 const ProjectDetails = () => {
   const route = useRoute();
@@ -22,42 +28,14 @@ const ProjectDetails = () => {
   const [activeTab, setActiveTab] = useState('Tasks');
   const tabs = ['Tasks', 'Team', 'Files', 'Activity'];
 
-  // Priority badge styling (top card)
-  const getPriorityStyle = priority => {
-    switch (priority) {
-      case 'Critical':
-        return { bg: colors.CriticalRedBg, text: colors.CriticalRedText };
-      case 'High':
-        return { bg: colors.HighAmberBg, text: colors.HighAmberText };
-      case 'Medium':
-        return { bg: colors.MediumBlueBg, text: colors.MediumBlueText };
-      case 'Low':
-        return { bg: colors.LowGreenBg, text: colors.LowGreenText };
-      default:
-        return { bg: colors.Slate100, text: colors.MutedSlateGray };
-    }
-  };
-
-  // Status badge styling (task item list)
-  const getStatusStyle = status => {
-    switch (status) {
-      case 'In Progress':
-        return { bg: colors.MediumBlueBg, text: colors.primary, dot: colors.HighAmberText };
-      case 'Completed':
-        return { bg: colors.LowGreenBg, text: colors.LowGreenText, dot: colors.HighAmberText };
-      case 'Backlog':
-        return { bg: colors.Slate100, text: colors.MutedSlateGray, dot: colors.primary };
-      case 'Testing':
-        return { bg: colors.PurpleIconBg, text: colors.secondary, dot: colors.LowGreenText };
-      default:
-        return { bg: colors.Slate100, text: colors.MutedSlateGray, dot: colors.MutedSlateGray };
-    }
-  };
-
   const handleNext = () => {
     navigation.navigate('EditProject', { project });
   };
 
+  const handleAddTask= ()=>{
+
+  }
+  
   const priorityStyle = getPriorityStyle(project?.priority);
 
   return (
@@ -79,12 +57,14 @@ const ProjectDetails = () => {
             <View
               style={[
                 styles.folderIconBg,
-                { backgroundColor: `${project?.themeColor || colors.primary}15` },
+                {
+                  backgroundColor: `${project?.themeColor || colors.primary}15`,
+                },
               ]}
             >
               <Feather
                 name="folder"
-                size={22}
+                size={spacing.mtwentyTwo}
                 color={project?.themeColor || colors.primary}
               />
             </View>
@@ -110,44 +90,62 @@ const ProjectDetails = () => {
         <View style={styles.progressSection}>
           <View style={styles.progressLabelRow}>
             <Text style={styles.progressLabel}>Progress</Text>
-            <Text style={styles.progressText}>{project?.progress || 0}%</Text>
           </View>
-          <View style={styles.track}>
-            <View
-              style={[
-                styles.fill,
-                {
-                  width: `${project?.progress || 0}%`,
-                  backgroundColor: project?.themeColor || colors.primary,
-                },
-              ]}
-            />
+          <View style={styles.progressContainer}>
+            <View style={styles.track}>
+              <View
+                style={[
+                  styles.fill,
+                  {
+                    width: `${project?.progress || 0}%`,
+                    backgroundColor: project?.themeColor || colors.primary,
+                  },
+                ]}
+              />
+            </View>
+            <Text style={styles.progressText}>{project?.progress || 0}%</Text>
           </View>
         </View>
 
         {/* 4 Cards Stat Grid */}
         <View style={styles.statsGrid}>
           <View style={styles.statCard}>
-            <Feather name="check-square" size={16} color={colors.primary} />
-            <Text style={styles.statNumber}>{project?.tasksCount || 0}</Text>
+            <Feather
+              name="check-square"
+              size={spacing.msixteen}
+              color={colors.primary}
+            />
+            <Text style={styles.statNumber}>{project?.tasksCount}</Text>
             <Text style={styles.statLabel}>Tasks</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Feather name="users" size={16} color={colors.primary} />
-            <Text style={styles.statNumber}>{project?.membersCount || 0}</Text>
+            <Feather
+              name="users"
+              size={spacing.msixteen}
+              color={colors.primary}
+            />
+            <Text style={styles.statNumber}>{project?.membersCount}</Text>
             <Text style={styles.statLabel}>Members</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Feather name="calendar" size={16} color={colors.primary} />
-            <Text style={styles.statNumber}>Oct 01</Text>
+            <Feather
+              name="calendar"
+              size={spacing.msixteen}
+              color={colors.primary}
+            />
+            <Text style={styles.statNumber}>{project?.startDate}</Text>
             <Text style={styles.statLabel}>Start</Text>
           </View>
 
           <View style={styles.statCard}>
-            <Feather name="flag" size={16} color={colors.primary} />
-            <Text style={styles.statNumber}>{project?.dueDate || 'N/A'}</Text>
+            <Feather
+              name="flag"
+              size={spacing.msixteen}
+              color={colors.primary}
+            />
+            <Text style={styles.statNumber}>{project?.dueDate}</Text>
             <Text style={styles.statLabel}>End</Text>
           </View>
         </View>
@@ -177,16 +175,19 @@ const ProjectDetails = () => {
         </View>
 
         {/* Add Task Button */}
-        <View style={styles.addTask}>
-          <TouchableOpacity style={styles.addtskbtn} activeOpacity={0.7}>
-            <Feather
-              name="plus"
-              size={18}
-              color={colors.primary}
-            />
-            <Text style={styles.addtxt}>Add Task</Text>
-          </TouchableOpacity>
-        </View>
+       {/* Add Task Button (Entire Container Touchable) */}
+        <TouchableOpacity
+          style={styles.addTaskButton}
+          activeOpacity={0.7}
+          onPress={handleAddTask}
+        >
+          <Feather
+            name="plus"
+            size={spacing.meighteen}
+            color={colors.primary}
+          />
+          <Text style={styles.addtxt}>Add Task</Text>
+        </TouchableOpacity>
 
         {/* Task List */}
         <View style={styles.tasklist}>
@@ -237,124 +238,133 @@ export default ProjectDetails;
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    flex: spacing.a,
     backgroundColor: colors.white,
   },
   contentContainer: {
-    paddingHorizontal: '4%',
-    paddingTop: '3%',
-    paddingBottom: '6%',
+    paddingHorizontal: spacing.fifteen,
+    paddingTop: spacing.vfifteen,
+    paddingBottom: spacing.vten,
   },
   cardHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
   titleGroup: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: spacing.htwelve,
   },
   folderIconBg: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
+    width: spacing.hfortyOne,
+    aspectRatio: spacing.a,
+    borderRadius: spacing.mtwenty,
     justifyContent: 'center',
     alignItems: 'center',
   },
   cardTitle: {
-    fontSize: 18,
-    fontFamily: Fonts.Bold || 'System',
+    fontSize: typography.font18,
+    fontFamily: Fonts.Bold,
     color: colors.VeryDarkSlateBlue,
   },
   cardAuthor: {
-    fontSize: 14,
+    fontSize: typography.lg,
     color: colors.SlateGrayText,
-    marginTop: '1%',
   },
   priorityBadge: {
-    paddingHorizontal: '3%',
-    paddingVertical: '1.2%',
-    borderRadius: 14,
+    marginLeft: spacing.hfive,
+    paddingHorizontal: spacing.three,
+    paddingVertical: spacing.vfive,
+    borderRadius: spacing.mfourteen,
+    marginTop: spacing.vtwo,
   },
   priorityText: {
-    fontSize: 12,
+    fontFamily: Fonts.SemiBold,
+    fontSize: typography.m,
     fontWeight: '700',
   },
   progressSection: {
-    marginTop: '5%',
+    marginTop: spacing.vfive,
   },
   progressLabelRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'center',
-    marginBottom: '2%',
+    marginBottom: spacing.two,
   },
   progressLabel: {
-    fontSize: 14,
+    fontSize: typography.m,
+    fontFamily: Fonts.SemiBold,
     color: colors.MutedSlateGray,
   },
   progressText: {
-    fontSize: 14,
+    fontSize: spacing.mfourteen,
     fontFamily: Fonts.Bold,
     color: colors.VeryDarkSlateBlue,
   },
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.hten,
+  },
   track: {
-    height: 8,
+    flex: spacing.a,
+    height: spacing.vfour,
     backgroundColor: colors.Slate100,
-    borderRadius: 4,
+    borderRadius: spacing.mfour,
     overflow: 'hidden',
   },
   fill: {
-    height: '100%',
-    borderRadius: 4,
+    height: spacing.fullWidth,
+    borderRadius: spacing.mfour,
   },
   statsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: '5%',
-    gap: 8,
+    justify: 'space-between',
+    marginTop: spacing.veight,
+    gap: spacing.heights,
   },
   statCard: {
-    flex: 1,
+    flex: spacing.a,
     backgroundColor: colors.OffWhite,
-    borderRadius: 16,
-    paddingVertical: '3.5%',
+    borderRadius: spacing.msixteen,
+    paddingVertical: spacing.vsix,
     alignItems: 'center',
-    justifyContent: 'center',
+    justify: 'center',
   },
   statNumber: {
-    fontSize: 14,
+    fontSize: typography.xl,
     fontFamily: Fonts.Bold,
     color: colors.VeryDarkSlateBlue,
-    marginTop: '5%',
+    marginTop: spacing.vthree,
   },
   statLabel: {
-    fontSize: 12,
+    fontFamily: Fonts.Regular,
+    fontSize: typography.m,
     color: colors.SlateGrayText,
-    marginTop: '1%',
+    marginTop: spacing.vtwo,
   },
   tabcontainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: spacing.borderThin,
     borderBottomColor: colors.LightGray,
     backgroundColor: colors.white,
-    marginTop: '5%',
+    marginTop: spacing.vten,
   },
   tabItem: {
-    flex: 1,
+    flex: spacing.a,
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: '3%',
-    borderBottomWidth: 2.5,
+    justify: 'center',
+    paddingVertical: spacing.veight,
+    borderBottomWidth: spacing.vtwo,
     borderBottomColor: 'transparent',
   },
   activeTabItem: {
     borderBottomColor: colors.primary,
   },
   tabText: {
-    fontSize: 13,
+    fontSize: typography.lg,
     fontFamily: Fonts.SemiBold,
   },
   activeTabText: {
@@ -363,76 +373,72 @@ const styles = StyleSheet.create({
   inactiveTabText: {
     color: colors.MutedSlateGray,
   },
-  addTask: {
-    marginTop: '4%',
-    borderRadius: 24,
+  addTaskButton: {
+    marginTop: spacing.vtewlve,
+    borderRadius: spacing.mtwentyFour,
     borderStyle: 'dashed',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: '2.5%',
-    borderWidth: 1,
+    paddingVertical: spacing.veight,
+    borderWidth: spacing.borderThin,
     borderColor: colors.primary,
     backgroundColor: colors.white,
   },
-  addtskbtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   addtxt: {
-    marginLeft: '2%',
+    marginLeft: spacing.hfive,
     color: colors.primary,
-    fontSize: 14,
+    fontSize: typography.xl,
     fontFamily: Fonts.SemiBold,
   },
   tasklist: {
-    marginTop: '3.5%',
+    marginTop: spacing.vten,
   },
   card: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: '4%',
-    paddingVertical: '3.5%',
+    paddingHorizontal: spacing.htwelve,
+    paddingVertical: spacing.vten,
     backgroundColor: colors.white,
-    borderRadius: 20,
-    borderWidth: 1,
+    borderRadius: spacing.mtwenty,
+    borderWidth: spacing.borderThin,
     borderColor: colors.LightGray,
-    marginBottom: '2.5%',
+    marginBottom: spacing.vseven,
   },
   cardLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
-    paddingRight: '2.5%',
+    flex: spacing.a,
+    paddingRight: spacing.vtwo,
   },
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginRight: '3.5%',
+    width: spacing.heights,
+    height: spacing.vseven,
+    borderRadius: spacing.msix,
+    marginRight: spacing.vseven,
   },
   nameAndtitle: {
-    flex: 1,
+    flex: spacing.a,
   },
   taskTitle: {
-    fontSize: 12,
+    fontSize: typography.m,
     fontFamily: Fonts.Medium,
     color: colors.VeryDarkSlateBlue,
   },
   taskAuthor: {
-    fontSize: 10,
+    fontSize: spacing.mten,
     fontFamily: Fonts.Regular,
     color: colors.Dargrey,
-    marginTop: '1%',
+    marginTop: spacing.vtwo,
   },
   statusBadge: {
-    paddingHorizontal: '3%',
-    paddingVertical: '1.2%',
-    borderRadius: 14,
+    paddingHorizontal: spacing.veight,
+    paddingVertical: spacing.vfour,
+    borderRadius: spacing.mfourteen,
   },
   statusText: {
-    fontSize: 10,
+    fontSize: spacing.mten,
     fontFamily: Fonts.SemiBold,
   },
 });

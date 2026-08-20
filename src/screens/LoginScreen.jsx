@@ -28,7 +28,7 @@ import { signInWithGoogle } from '../services/googleSign';
 import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { showSnackbar } from '../redux/slice/snackBarSlice';
-import { ms,s,vs } from 'react-native-size-matters';
+import { vs,s,ms } from 'react-native-size-matters';
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -65,10 +65,7 @@ const LoginScreen = () => {
             type: 'success',
           }),
         );
-        // navigation.replace('BottomTabs', {
-        //   screen: 'Home',
-        //   params: { userData },
-        // });
+        
       } else {
         setLoading(false);
         Alert.alert('Error', 'User profile was not found.');
@@ -129,13 +126,13 @@ const LoginScreen = () => {
                     end={{ x: 1, y: 1 }}
                     style={styles.card}
                   >
-                    <LoginIcon width={36} height={36} />
+                    <LoginIcon width={spacing.hthirtySix} height={spacing.hthirtySix} />
                   </LinearGradient>
                 </View>
 
                 <View style={styles.headingText}>
                   <Text style={styles.title}>Welcome Back</Text>
-                  <Text style={styles.subtitle}adjustsFontSizeToFit>
+                  <Text style={styles.subtitle} adjustsFontSizeToFit>
                     Sign In to Your TaskFlow account
                   </Text>
                 </View>
@@ -175,7 +172,7 @@ const LoginScreen = () => {
               </View>
 
               <View style={styles.btnContainer}>
-                <CustomButton title="Sign In" onPress={handleLogin}  loading={loading}/>
+                <CustomButton title="Sign In" onPress={handleLogin} loading={loading} />
               </View>
 
               {/* Divider */}
@@ -192,7 +189,7 @@ const LoginScreen = () => {
                   activeOpacity={0.7}
                   onPress={handleGooglePress}
                 >
-                  <RedGlobe width={18} height={18} />
+                  <RedGlobe width={spacing.hEighteen} height={spacing.hEighteen} />
                   <Text style={styles.socialText}>Google</Text>
                 </TouchableOpacity>
 
@@ -200,7 +197,7 @@ const LoginScreen = () => {
                   style={styles.socialButton}
                   activeOpacity={0.7}
                 >
-                  <BlackGlobe width={18} height={18} />
+                  <BlackGlobe width={spacing.hEighteen} height={spacing.hEighteen} />
                   <Text style={styles.socialText}>GitHub</Text>
                 </TouchableOpacity>
               </View>
@@ -226,40 +223,39 @@ export default LoginScreen;
 
 const styles = StyleSheet.create({
   main: {
-    flex: 1,
+    flex: spacing.a,
     backgroundColor: colors.white,
   },
   keyboardView: {
-    flex: 1,
+    flex: spacing.a,
   },
   scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: ms(15),
+    flexGrow: spacing.a,
+    paddingHorizontal: spacing.fifteen,
   },
   mainContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
+    width: spacing.fullWidth,
     alignItems: 'center',
   },
   firstContainer: {
-    width: ms(210),
+    width: spacing.hTwoTen,
   },
   iconContainer: {
     alignItems: 'center',
-    paddingTop: 30,
+    paddingTop: spacing.vthirty,
   },
   iconWrapper: {
-    width: 70,
+    width: spacing.hSeventy,
     aspectRatio: spacing.a,
-    marginBottom: 15,
+    marginBottom: spacing.vfifteen,
     backgroundColor: 'transparent',
-    borderRadius: 24,
+    borderRadius: spacing.mtwentyFour,
     boxShadow: colors.btnShadow,
   },
   card: {
     width: spacing.fullWidth,
-    paddingVertical:20,
-    borderRadius: 24,
+    paddingVertical: spacing.vtwenty,
+    borderRadius: spacing.mtwentyFour,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -269,19 +265,19 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: Fonts.Bold,
-    fontSize: 25,
+    fontSize: spacing.mtwentyFive,
     textAlign: 'center',
     color: colors.VeryDarkSlateBlue,
   },
   subtitle: {
     fontFamily: Fonts.Regular,
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
     color: colors.Dargrey,
     textAlign: 'center',
   },
   formContainer: {
     width: spacing.fullWidth,
-    marginTop: vs(10),
+    marginTop: spacing.vten,
   },
   forgetContainer: {
     justifyContent: 'center',
@@ -292,69 +288,69 @@ const styles = StyleSheet.create({
   frgtTxt: {
     color: colors.primary,
     fontFamily: Fonts.Medium,
-    fontSize: 13,
+    fontSize: spacing.mthirteen,
   },
   btnContainer: {
-    paddingTop: vs(20),
+    paddingTop: spacing.vtwenty,
   },
-
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: vs(8),
+    paddingVertical: spacing.veight,
   },
   dividerLine: {
-    flex: 1,
-    height: 1,
+    flex: spacing.a,
+    height: spacing.borderThin,
     backgroundColor: colors.LightGray,
   },
   dividerText: {
-    paddingHorizontal: s(10),
+    paddingHorizontal: spacing.hten,
     color: colors.Dargrey,
     fontFamily: Fonts.Regular,
-    fontSize: 13,
+    fontSize: spacing.mthirteen,
   },
-
   socialContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
+    width: spacing.fullWidth,
+    gap: spacing.htwelve,
   },
   socialButton: {
-    flex: 1,
+    flex: spacing.a,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: spacing.a,
+    borderWidth: spacing.borderThin,
     borderColor: colors.LightGray,
-    borderRadius: 24,
-    paddingVertical: vs(9),
+    borderRadius: spacing.mtwentyFour,
+    paddingVertical: spacing.vnine,
+    paddingHorizontal: spacing.heights,
     backgroundColor: colors.white,
   },
   socialText: {
-    marginLeft: s(8),
+    marginLeft: spacing.hfour,
     fontFamily: Fonts.Bold,
-    fontSize: 14,
+    fontSize: spacing.mthirteen,
     color: colors.VeryDarkSlateBlue,
   },
   createContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: vs(15),
+    marginTop: spacing.vfifteen,
   },
   accountText: {
     fontFamily: Fonts.Regular,
-    fontSize: 13,
+    fontSize: spacing.mthirteen,
     color: colors.Dargrey,
   },
   create: {
-    paddingVertical: vs(5),
+    paddingVertical: spacing.vfive,
   },
   createTxt: {
     color: colors.primary,
     fontFamily: Fonts.Bold,
-    fontSize: 13,
+    fontSize: spacing.mthirteen,
   },
 });

@@ -22,18 +22,18 @@ const BottomTabNavigator = () => {
         tabBarActiveTintColor: '#2260FF',
         tabBarInactiveTintColor: '#A8B0BE', 
         tabBarStyle: {
+          position:'absolute',
             height: Platform.OS=='android' ? 50+ insets.bottom :60,
-             paddingBottom:10     // Increases height to accommodate the extra padding
+             paddingBottom:10     
         },
       }
-      
     }
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: () => (
             <Ionicons name="home-outline" size={25} color={"#9CA3AF"} />
           ),
         }}

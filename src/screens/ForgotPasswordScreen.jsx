@@ -20,7 +20,6 @@ import CustomButton from '../components/CustomButton';
 
 import { getAuth } from '@react-native-firebase/auth';
 import { spacing } from '../constants/spacing';
-import { vs,s } from 'react-native-size-matters';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -147,42 +146,42 @@ const styles = StyleSheet.create({
     flexGrow: spacing.a,
   },
   mainContainer: {
-    paddingTop: vs(40),
+    paddingTop: spacing.vforty,
     alignItems: 'center',
-    paddingHorizontal: s(15),
+    paddingHorizontal: spacing.fifteen,
   },
   iconContainer: {
-    width: s(100),
+    width: spacing.hOneHundred,
     aspectRatio: spacing.a,
     justifyContent: 'center',
     alignItems: 'center',
   },
   headingContainer: {
-    marginTop: vs(15),
+    marginTop: spacing.vfifteen,
   },
   headingTxt: {
     fontFamily: Fonts.Bold,
-    fontSize: 22,
+    fontSize: spacing.mtwentyTwo,
     color: colors.black,
     textAlign: 'center',
   },
   subheading: {
-    paddingTop: vs(2),
-    paddingBottom: vs(20),
+    paddingTop: spacing.vtwo,
+    paddingBottom: spacing.vtwenty,
   },
   subheadingtxt: {
     textAlign: 'center',
     fontFamily: Fonts.Regular,
-    fontSize: 14,
+    fontSize: spacing.mfourteen,
     color: colors.MutedSlateGray,
-    lineHeight: 20,
+    lineHeight: spacing.lhTwenty,
   },
   formContainer: {
     width: spacing.fullWidth,
-    paddingTop: vs(10),
+    paddingTop: spacing.vten,
   },
   buttonContainer: {
-    marginTop:vs(8),
+    marginTop: spacing.veight,
   },
   backToSignBtn: {
     marginTop: spacing.four,
@@ -190,11 +189,11 @@ const styles = StyleSheet.create({
   },
   backToSignTxt: {
     fontFamily: Fonts.SemiBold,
-    fontSize: 14,
+    fontSize: spacing.mfourteen,
     color: colors.Dargrey,
   },
   fbtn: {
     fontFamily: Fonts.Bold,
-    fontSize: 14,
+    fontSize: spacing.mfourteen,
   },
 });

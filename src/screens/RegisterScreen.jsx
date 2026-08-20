@@ -22,14 +22,11 @@ import {
   createUserWithEmailAndPassword,
 } from '@react-native-firebase/auth';
 
-import {
-  getFirestore,
-  doc,
-  setDoc,
-} from '@react-native-firebase/firestore';
+import { getFirestore, doc, setDoc } from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import { spacing } from '../constants/spacing';
-import { s, vs, ms } from 'react-native-size-matters';
+import { showSnackbar } from '../redux/slice/snackBarSlice';
+import { useDispatch } from 'react-redux';
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -41,9 +38,9 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agredTerms, setAgrredTerms] = useState(false);
-
+  const dispatch = useDispatch();
   const handleSignin = () => {
-    navigation.navigate("Login");
+    navigation.navigate('Login');
   };
 
   const handleCreate = async () => {
@@ -59,17 +56,33 @@ const RegisterScreen = () => {
       !password.trim() ||
       !confirmPassword.trim()
     ) {
-      Alert.alert('Please enter All Fields');
+      dispatch(
+        showSnackbar({
+          message: 'Please Enter All The Fields',
+          type: 'error',
+        }),
+      );
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
+      dispatch(
+        showSnackbar({
+          message: "'Passwords do not match.'",
+          type: 'error',
+        }),
+      );
+
       return;
     }
 
     if (!agredTerms) {
-      Alert.alert('Error', 'You must agree to the Terms and Privacy Policy.');
+      dispatch(
+        showSnackbar({
+          message: 'You must agree to the Terms and Privacy Policy.',
+          type: 'error',
+        }),
+      );
       return;
     }
     try {
@@ -102,8 +115,14 @@ const RegisterScreen = () => {
       setConfirmPassword('');
       setAgrredTerms(false);
 
-      Alert.alert('Success', 'Account created successfully!');
-      navigation.navigate("Login");
+      dispatch(
+        showSnackbar({
+          message: 'Account Created Successfully....',
+          type: 'success',
+        }),
+      );
+
+      navigation.navigate('Login');
     } catch (error) {
       console.log('Error Saving user: ', error);
 
@@ -115,7 +134,12 @@ const RegisterScreen = () => {
       } else if (error.code === 'auth/weak-password') {
         errorMessage = 'Password should be at least 6 characters.';
       }
-      Alert.alert('Registration Failed', errorMessage);
+      dispatch(
+        showSnackbar({
+          message: 'Registration Failed',
+          type: 'error',
+        }),
+      );
     }
   };
 
@@ -210,7 +234,11 @@ const RegisterScreen = () => {
                 style={[styles.checkBox, agredTerms && styles.sheckBoxTicked]}
               >
                 {agredTerms && (
-                  <Ionicons name="checkmark" size={ms(12)} color={colors.white} />
+                  <Ionicons
+                    name="checkmark"
+                    size={spacing.mtwelve}
+                    color={colors.white}
+                  />
                 )}
               </TouchableOpacity>
               <Text style={styles.termsText}>
@@ -247,47 +275,47 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     flexGrow: spacing.a,
-    paddingBottom: vs(spacing.registerPaddingBottom), // Adds space at bottom so button isn't cut off on small screens
+    paddingBottom: spacing.registerPaddingBottom,
   },
   formContainer: {
-    paddingHorizontal: s(16),
-    paddingTop: vs(8),
-    rowGap: vs(spacing.registerGap), // Tightens vertical spacing between inputs
+    paddingHorizontal: spacing.hsixteen,
+    paddingTop: spacing.veight,
+    rowGap: spacing.registerGap,
   },
   namecontainer: {
     flexDirection: 'row',
     width: spacing.fullWidth,
-    gap: s(8), // Replaces width: '48%' with dynamic gap
+    gap: spacing.veight,
   },
   halfWidth: {
-    flex: spacing.a, // Lets both inputs share width 50/50 dynamically
+    flex: spacing.a,
   },
   lowerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.OffWhite,
-    paddingVertical: vs(10),
-    paddingHorizontal: s(12),
-    borderRadius: ms(20),
-    marginVertical: vs(4),
+    paddingVertical: spacing.vten,
+    paddingHorizontal: spacing.htwelve,
+    borderRadius: spacing.mtwenty,
+    marginVertical: spacing.vfour,
   },
   checkBox: {
-    width: s(20),
-    height: s(20),
-    borderRadius: ms(spacing.checkBoxRadius),
-    borderWidth: spacing.a,
+    width: spacing.htwenty,
+    height: spacing.htwenty,
+    borderRadius: spacing.checkBoxRadius,
+    borderWidth: spacing.borderThin,
     borderColor: colors.LightSlateGray,
     backgroundColor: colors.white,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: s(10),
+    marginRight: spacing.hten,
   },
   sheckBoxTicked: {
     backgroundColor: colors.primary,
     borderColor: colors.primary,
   },
   termsText: {
-    fontSize: ms(11),
+    fontSize: spacing.meleven,
     color: colors.MutedSlateGray,
     flex: spacing.a,
   },
@@ -299,18 +327,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    marginTop: vs(8),
+    marginTop: spacing.veight,
   },
   alreadytxt: {
     fontFamily: Fonts.Regular,
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
   },
   signinbtn: {
-    marginHorizontal: s(4),
+    marginHorizontal: spacing.hfour,
   },
   signtxt: {
     color: colors.primary,
     fontFamily: Fonts.Regular,
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
   },
 });

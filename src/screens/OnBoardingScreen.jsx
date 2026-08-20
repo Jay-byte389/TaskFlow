@@ -61,7 +61,7 @@ const OnBoardingScreen = () => {
               backgroundColor: colors.white,
               image: (
                 <View style={styles.iconCard}>
-                  <OnboardingIcon1 width={50} height={50} />
+                  <OnboardingIcon1 width={spacing.hFifty} height={spacing.hFifty} />
                 </View>
               ),
               title: 'Manage Projects\nEffortlessly',
@@ -72,7 +72,7 @@ const OnBoardingScreen = () => {
               backgroundColor: colors.white,
               image: (
                 <View style={styles.secondiconCard}>
-                  <OnboardingIcon2 width={50} height={50} />
+                  <OnboardingIcon2 width={spacing.hFifty} height={spacing.hFifty} />
                 </View>
               ),
               title: 'Collaborate With Your\n Team',
@@ -82,7 +82,7 @@ const OnBoardingScreen = () => {
               backgroundColor: colors.white,
               image: (
                 <View style={styles.thirdiconCard}>
-                  <OnboardingIcon3 width={50} height={50} />
+                  <OnboardingIcon3 width={spacing.hFifty} height={spacing.hFifty} />
                 </View>
               ),
               title: 'Track Progess & Analytics',
@@ -104,7 +104,7 @@ const OnBoardingScreen = () => {
               {isLastPage ? 'Get Started' : 'Continue'}
             </Text>
             <View style={styles.arrowWrapper}>
-              <FontAwesomeIcon icon={faLongArrowRight} color={colors.white} size={16} />
+              <FontAwesomeIcon icon={faLongArrowRight} color={colors.white} size={spacing.msixteen} />
             </View>
           </View>
         </TouchableOpacity>
@@ -124,87 +124,87 @@ const styles = StyleSheet.create({
     flex: spacing.a,
   },
   onboardingContainer: {
-    paddingHorizontal: '5%',
+    paddingHorizontal: spacing.vten,
     justifyContent: 'flex-start',
-    paddingTop: '60%',
+    paddingTop: spacing.Onboarding,
   },
   imageContainer: {
-    paddingBottom: '3%',
+    paddingBottom: spacing.vfive,
   },
 
-  // Icon Cards with pure % width and aspect ratio
+  // Icon Cards with scaled sizes and border radius
   iconCard: {
-    width: '36%',
-    aspectRatio: 1,
+    width: spacing.hEighty,
+    aspectRatio: spacing.a,
     backgroundColor: colors.IndigoIconBg,
-    borderRadius: 28,
+    borderRadius: spacing.mTwentyEight,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 3,
     shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: spacing.vfour },
     shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowRadius: spacing.heights,
   },
   secondiconCard: {
-    width: '36%',
-    aspectRatio: 1,
+    width: spacing.hEighty,
+    aspectRatio: spacing.a,
     backgroundColor: colors.PurpleIconBg,
-    borderRadius: 28,
-    justifyContent: 'center',
+    borderRadius: spacing.mTwentyEight,
+    justify: 'center',
     alignItems: 'center',
     elevation: 3,
     shadowColor: colors.PurpleIcon,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: spacing.vfour },
     shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowRadius: spacing.heights,
   },
   thirdiconCard: {
-    width: '36%',
-    aspectRatio: 1,
+    width: spacing.hEighty,
+    aspectRatio: spacing.a,
     backgroundColor: colors.LowGreenBg,
-    borderRadius: 28,
-    justifyContent: 'center',
+    borderRadius: spacing.mTwentyEight,
+    justify: 'center',
     alignItems: 'center',
     elevation: 3,
     shadowColor: colors.LowGreenText,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: spacing.vfour },
     shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowRadius: spacing.heights,
   },
 
   skipbtn: {
     position: 'absolute',
-    top: '4%',
-    right: '5%',
+    top: spacing.vtwenty,
+    right: spacing.htwenty,
     zIndex: 10,
-    padding: '2%',
+    padding: spacing.heights,
   },
   skipTxt: {
     color: colors.Dargrey,
-    fontSize: 15,
-    fontFamily: Fonts.Medium || 'System',
+    fontSize: spacing.mfifteen,
+    fontFamily: Fonts.Medium,
   },
 
   // Responsive Button Wrapper
   buttonWrapper: {
-    width: '100%',
+    width: spacing.fullWidth,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: '5%',
+    paddingBottom: spacing.vfifteen,
   },
   continueButton: {
     width: '88%',
-    paddingVertical: '3.8%',
-    borderRadius: 16,
+    paddingVertical: spacing.vEleven,
+    borderRadius: spacing.msixteen,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4,
     shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { width: 0, height: spacing.vfour },
     shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowRadius: spacing.heights,
   },
   txtcontainer: {
     flexDirection: 'row',
@@ -213,42 +213,40 @@ const styles = StyleSheet.create({
   },
   continueText: {
     color: colors.white,
-    fontFamily: Fonts.Bold || 'System',
-    fontSize: 16,
+    fontFamily: Fonts.Bold,
+    fontSize: spacing.msixteen,
   },
   arrowWrapper: {
-    marginLeft: '2.5%',
+    marginLeft: spacing.hfive,
     justifyContent: 'center',
   },
 
   title: {
-    fontFamily: Fonts.Bold || 'System',
-    fontSize: 24,
+    fontFamily: Fonts.Bold,
+    fontSize: spacing.mtwentyFour,
     color: colors.VeryDarkSlateBlue,
     textAlign: 'center',
-    lineHeight: 32,
+    lineHeight: spacing.LH,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: spacing.mfourteen,
     color: colors.MutedSlateGray,
     textAlign: 'center',
-    paddingHorizontal: '3%',
-    lineHeight: 20,
-    marginTop: '1%',
+    paddingHorizontal: spacing.hfive,
+    lineHeight: spacing.lhTwenty,
+    marginTop: spacing.vtwo,
   },
 
   dot: {
-    height: 6,
-    borderRadius: 3,
-    marginHorizontal: '1%',
-    marginBottom: '4%',
+    height: spacing.vsix,
+    borderRadius: spacing.vthree,
   },
   activeDot: {
-    width: 24,
+    width: spacing.hTwentyFive,
     backgroundColor: colors.primary,
   },
   inactiveDot: {
-    width: 6,
+    width: spacing.heights,
     backgroundColor: colors.LightGray,
   },
 });

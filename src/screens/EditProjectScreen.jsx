@@ -20,7 +20,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../components/CustomButton';
 import { Fonts } from '../constants/Fonts';
 import { spacing } from '../constants/spacing';
-import { s, vs, ms } from 'react-native-size-matters';
+import { users } from '../utils/ProjectsData';
 
 const EditProjectScreen = () => {
   const navigation = useNavigation();
@@ -28,35 +28,36 @@ const EditProjectScreen = () => {
   const project = route.params?.project || {};
   const [activeTab, setActiveTab] = useState('Low');
   const [selectedUser, setSelectedUser] = useState('1');
-  const users = [
-    { label: 'Alex Chen', value: '1', initials: 'AC', color: colors.primary },
-    { label: 'Sarah Jenkins', value: '2', initials: 'SJ', color: colors.secondary },
-    { label: 'Mike', value: '3', initials: 'MR', color: colors.LowGreenText },
-    { label: 'Emma', value: '4', initials: 'ED', color: colors.HighAmberText },
-  ];
-
+  
   const currentUserObj = users.find(u => u.value === selectedUser);
 
   const handleSave = () => {
-    navigation.replace('ProjectDetails', { project });
+      navigation.goBack()
+
   };
 
-  const handleRemoveUser = userId => {
-    // Logic for removing user
-  };
+ const handleCancel =()=>{
+  navigation.goBack()
+}
 
+
+ const handleBack =()=>{
+  navigation.navigate("")
+ }
+
+ const handleRemoveUser =()=>{}
   return (
     <SafeAreaView style={styles.main}>
       <ProjectsHeader
         showBack
         title="Edit Project"
         isDestructive
-        rightIcon="trash-outline"
+        rightIcon="trash-outline" onBackPress={handleBack}
       />
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : spacing.htwenty}
       >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -71,7 +72,7 @@ const EditProjectScreen = () => {
               placeholderTextColor={colors.black}
             />
             <Input label="Description" placeholder="Project Description" />
-            
+
             <DateRangePicker />
 
             <View style={styles.tabSwitchContainer}>
@@ -82,6 +83,7 @@ const EditProjectScreen = () => {
                 onTabChange={tab => setActiveTab(tab)}
                 style={styles.tabSwitcher}
                 pillstyle={styles.pill}
+                inactivepill={styles.inactive}
               />
             </View>
 
@@ -108,7 +110,7 @@ const EditProjectScreen = () => {
                     <View
                       style={[
                         styles.chipAvatar,
-                        { backgroundColor: item.color || colors.primary },
+                        { backgroundColor: item.color  },
                       ]}
                     >
                       <Text style={styles.chipAvatarText}>{item.initials}</Text>
@@ -120,11 +122,10 @@ const EditProjectScreen = () => {
 
                     <TouchableOpacity
                       onPress={() => handleRemoveUser(item.value)}
-                      hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                     >
                       <Icon
                         name="close-outline"
-                        size={ms(16)}
+                        size={spacing.msixteen}
                         color={colors.MutedSlateGray}
                       />
                     </TouchableOpacity>
@@ -135,7 +136,7 @@ const EditProjectScreen = () => {
                 <TouchableOpacity style={styles.addButton}>
                   <Icon
                     name="person-add-outline"
-                    size={ms(14)}
+                    size={spacing.mfourteen}
                     color={colors.primary}
                   />
                   <Text style={styles.addText}>Add</Text>
@@ -146,9 +147,10 @@ const EditProjectScreen = () => {
             <View style={styles.btnContainer}>
               <CustomButton
                 title="Cancel"
-                disabled
+                onPress={handleCancel}
                 disabledtxt={styles.distxt}
                 style={styles.btn}
+                button={styles.Button}
               />
               <CustomButton
                 title="Save Changes"
@@ -176,118 +178,124 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: spacing.a,
-    paddingBottom: vs(24),
+    paddingBottom: spacing.vtwentyFour,
   },
   formContainer: {
-    paddingHorizontal: s(16),
-    rowGap: vs(12),
+    paddingHorizontal: spacing.hsixteen,
+    rowGap: spacing.registerGap,
   },
   tabSwitchContainer: {
-    marginTop: vs(8),
-    paddingHorizontal: s(4),
-    zIndex: 1,
+    marginTop: spacing.vtwo,
+    paddingHorizontal: spacing.hfour,
+    zIndex: spacing.zIndexBase,
   },
   tabSwitcher: {
-    marginTop: vs(8),
-    paddingHorizontal: s(8),
+    marginTop: spacing.veight,
+    paddingHorizontal: spacing.heights,
     justifyContent: 'center',
   },
   tabswitchertext: {
     color: colors.MutedSlateGray,
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
   },
   pill: {
-    paddingHorizontal: s(16),
+    paddingHorizontal: spacing.htwelve,
+    paddingVertical: spacing.hfive,
   },
+
   avatar: {
-    width: s(28),
-    height: s(28),
-    borderRadius: ms(14),
+    width: spacing.hTwentyEight,
+    height: spacing.hTwentyEight,
+    borderRadius: spacing.mfourteen,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: s(8),
+    marginRight: spacing.heights,
   },
   avatarText: {
     color: colors.white,
-    fontSize: ms(11),
+    fontSize: spacing.meleven,
     fontWeight: '700',
   },
   teamContainer: {
-    marginTop: vs(12),
+    marginTop: spacing.vtwo,
   },
   teamtxt: {
-    fontSize: ms(12),
+    fontSize: spacing.mtwelve,
     color: colors.MutedSlateGray,
     fontWeight: '600',
-    marginBottom: vs(8),
-    letterSpacing: 0.5,
+    marginBottom: spacing.veight,
+    letterSpacing: spacing.aa,
   },
   chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: s(8),
+    gap: spacing.heights,
     alignItems: 'center',
   },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.Slate100,
-    borderRadius: ms(20),
-    paddingVertical: vs(4),
-    paddingLeft: s(4),
-    paddingRight: s(10),
+    borderRadius: spacing.mtwenty,
+    paddingVertical: spacing.vfour,
+    paddingLeft: spacing.hfour,
+    paddingRight: spacing.hten,
   },
   chipAvatar: {
-    width: s(28),
-    height: s(28),
-    borderRadius: ms(14),
+    width: spacing.hTwentyEight,
+    height: spacing.hTwentyEight,
+    borderRadius: spacing.mfourteen,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: s(6),
+    marginRight: spacing.hsix,
   },
   chipAvatarText: {
     color: colors.white,
-    fontSize: ms(11),
+    fontSize: spacing.meleven,
     fontWeight: '700',
   },
   chipName: {
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
     fontWeight: '600',
     color: colors.VeryDarkSlateBlue,
-    marginRight: s(6),
+    marginRight: spacing.hsix,
   },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.white,
-    borderWidth: 1,
+    borderWidth: spacing.borderThin,
     borderColor: colors.LightSlateGray,
     borderStyle: 'dashed',
-    borderRadius: ms(20),
-    paddingVertical: vs(6),
-    paddingHorizontal: s(14),
-    gap: s(4),
+    borderRadius: spacing.mtwenty,
+    paddingVertical: spacing.vsix,
+    paddingHorizontal: spacing.hfourteen,
+    gap: spacing.hfour,
   },
   addText: {
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
     fontWeight: '600',
     color: colors.primary,
   },
   btnContainer: {
-    paddingTop: vs(24),
+    paddingTop: spacing.vtwentyFour,
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: s(12),
+    justify: 'space-between',
+    gap: spacing.htwelve,
   },
   distxt: {
     color: colors.black,
   },
   btn: {
     flex: spacing.a,
+    color:colors.white,
+  },
+  Button:{
+    backgroundColor:colors.LightGray
   },
   txtbtn: {
-    fontSize: ms(13),
+    fontSize: spacing.mthirteen,
     fontFamily: Fonts.Bold,
   },
 });

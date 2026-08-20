@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Fonts } from '../constants/Fonts';
+import { colors } from '../constants/colors';
+import { typography } from '../constants/typography';
 
-const DropDown = ({ 
-  items = [], 
-  value, 
-  onSelect, 
-  placeholder = 'Select option', 
+const DropDown = ({
+  items = [],
+  value,
+  onSelect,
+  placeholder = 'Select option',
   headingtxt,
   zIndex = 1000,
   zIndexInverse = 1000,
@@ -19,16 +21,18 @@ const DropDown = ({
   const [open, setOpen] = useState(false);
   const [dropdownItems, setDropdownItems] = useState(items);
 
- useEffect(() => {
+  useEffect(() => {
     const formattedItems = items.map(item => {
       if (item.initials || item.icon) {
         return {
           ...item,
-          icon: item.icon || (() => (
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>{item.initials}</Text>
-            </View>
-          )),
+          icon:
+            item.icon ||
+            (() => (
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText }>{item.initials}</Text>
+              </View>
+            )),
         };
       }
       return item; // Standard dropdown item (no avatar)
@@ -37,15 +41,17 @@ const DropDown = ({
   }, [items]);
 
   return (
-    <View style={[styles.container, containerStyle, { zIndex: open ? zIndex : 1 }]}>
+    <View
+      style={[styles.container, containerStyle, { zIndex: open ? zIndex : 1 }]}
+    >
       {headingtxt && <Text style={styles.label}>{headingtxt}</Text>}
-      
+
       <DropDownPicker
         open={open}
         value={value}
         items={dropdownItems}
         setOpen={setOpen}
-        setValue={(callback) => {
+        setValue={callback => {
           const selectedVal = callback(value);
           if (onSelect) onSelect(selectedVal);
         }}
@@ -62,13 +68,10 @@ const DropDown = ({
         selectedItemLabelStyle={styles.selectedItemText}
         showArrowIcon={true}
         arrowIconStyle={styles.arrowIcon}
-        
         // Allow custom left icon (e.g., Avatar)
         renderLeftIcon={renderLeftIcon}
-        
         // Optional custom list item renderer
         renderListItem={renderListItem}
-
         zIndex={zIndex}
         zIndexInverse={zIndexInverse}
       />
@@ -83,23 +86,23 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   label: {
-    fontSize: 12,
-    color: '#8E99A6',
-    fontWeight: '600',
+    fontSize: typography.m,
+    fontFamily: Fonts.SemiBold,
+    color: colors.Dargrey,
     marginBottom: 8,
     letterSpacing: 0.5,
   },
   dropdown: {
     height: 52,
-    borderColor: '#E2E8F0',
+    borderColor: colors.OffWhite,
     borderWidth: 1,
     borderRadius: 26,
     paddingHorizontal: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   placeholderStyle: {
     color: '#8E99A6',
-    fontSize: 15,
+    fontSize: typography.xl,
   },
   textStyle: {
     fontSize: 15,
@@ -128,7 +131,8 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     tintColor: '#8E99A6',
-  },avatar: {
+  },
+  avatar: {
     width: 32,
     height: 32,
     borderRadius: 16,

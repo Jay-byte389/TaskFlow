@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { StyleSheet, Text, Animated, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideSnackbar } from '../redux/slice/snackBarSlice';
+import { getBackgroundColor } from '../utils/ProjectsData';
 
 const { width } = Dimensions.get('window');
 
@@ -24,7 +25,7 @@ const GlobalSnackbar = () => {
       // 3. Display timer: Auto-dismiss after 3 seconds
       const timer = setTimeout(() => {
         dismissSnackbar();
-      }, 3000);
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
@@ -44,7 +45,7 @@ const GlobalSnackbar = () => {
 
   if (!visible) return null;
 
-  const backgroundColor = type === 'error' ? '#EF4444' : '#2ae609';
+  const backgroundColor =  getBackgroundColor(type);
 
   return (
     <Animated.View style={[styles.snackbar, { backgroundColor, transform: [{ translateX }] }]}>

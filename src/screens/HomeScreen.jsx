@@ -11,31 +11,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getAuth } from '@react-native-firebase/auth';
-import { PROJECTS_DATA } from '../utils/ProjectsData';
 import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
+import { getPriorityStyle, PROJECTS_DATA } from '../utils/ProjectsData';
 import { colors } from '../constants/colors';
-import { s, vs, ms } from 'react-native-size-matters';
+import { spacing } from '../constants/spacing';
+import { Fonts } from '../constants/Fonts';
+import { typography } from '../constants/typography';
+import CustomButton from '../components/CustomButton';
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-
+  const navigation=useNavigation();
   const initial = firstName.charAt(0).toUpperCase();
 
-  const getPriorityStyle = priority => {
-    switch (priority) {
-      case 'Critical':
-        return { bg: colors.CriticalRedBg, text: colors.CriticalRedText };
-      case 'High':
-        return { bg: colors.HighAmberBg, text: colors.HighAmberText };
-      case 'Medium':
-        return { bg: colors.MediumBlueBg, text: colors.MediumBlueText };
-      case 'Low':
-        return { bg: colors.LowGreenBg, text: colors.LowGreenText };
-      default:
-        return { bg: colors.Slate100, text: colors.MutedSlateGray };
-    }
-  };
+
+  const handleCreateProject =()=>{
+    navigation.navigate("CreateProject")
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,40 +41,37 @@ const HomeScreen = () => {
       if (currentUser.displayName) {
         const nameParts = currentUser.displayName.trim().split(' ');
         setFirstName(nameParts[0] || 'User');
-        setLastName(nameParts.slice(1).join(' ') || '');
+        setLastName(nameParts.slice(1).join(' '));
         return;
-      }
-
-      try {
-        const db = getFirestore();
-        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setFirstName(userData.firstName || 'User');
-          setLastName(userData.lastName || '');
-        } else {
-          const rawEmail = currentUser.email?.split('@')[0] || 'User';
-          setFirstName(
-            rawEmail.charAt(0).toUpperCase() + rawEmail.slice(1)
-          );
-          setLastName('');
-        }
-      } catch (error) {
-        console.log('Error fetching user data from Firestore:', error);
       }
     };
 
     fetchUserData();
   }, []);
 
+  const renderEmptyState = () => (
+    <View style={styles.emptyContainer}>
+      <View style={styles.emptyIconBox}>
+        <Feather name="folder-minus" size={32} color={colors.MutedSlateGray} />
+      </View>
+      <Text style={styles.emptyTitle}>No Active Projects</Text>
+      <Text style={styles.emptySubtitle}>
+        You don't have any active projects right now. Create a new one to get
+        started!
+      </Text>
+      <CustomButton title="Create Project" onPress={handleCreateProject} />
+    </View>
+  );
+
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right','bottom']}>
+    <SafeAreaView
+      style={styles.container}
+      edges={['top', 'left', 'right', 'bottom']}
+    >
       <StatusBar barStyle="dark-content" backgroundColor={colors.white} />
 
       {/* Main Container */}
       <View style={styles.content}>
-        
         {/* Header Section */}
         <View style={styles.header}>
           <View style={styles.userInfo}>
@@ -97,12 +88,16 @@ const HomeScreen = () => {
 
           <View style={styles.headerIcons}>
             <TouchableOpacity style={styles.iconButton}>
-              <Ionicons name="search-outline" size={ms(20)} color={colors.DarkSlate} />
+              <Ionicons
+                name="search-outline"
+                size={20}
+                color={colors.DarkSlate}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton}>
               <Ionicons
                 name="notifications-outline"
-                size={ms(20)}
+                size={20}
                 color={colors.DarkSlate}
               />
               <View style={styles.notificationDot} />
@@ -115,11 +110,22 @@ const HomeScreen = () => {
           {/* Projects */}
           <View style={styles.metricCard}>
             <View style={styles.cardHeader}>
-              <View style={[styles.iconBox, { backgroundColor: colors.IndigoIconBg }]}>
-                <Feather name="folder" size={ms(18)} color={colors.IndigoIcon} />
+              <View
+                style={[
+                  styles.iconBox,
+                  { backgroundColor: colors.IndigoIconBg },
+                ]}
+              >
+                <Feather name="folder" size={18} color={colors.IndigoIcon} />
               </View>
-              <View style={[styles.badge, { backgroundColor: colors.LowGreenBg }]}>
-                <Text style={[styles.badgeText, { color: colors.LowGreenText }]}>+2</Text>
+              <View
+                style={[styles.badge, { backgroundColor: colors.LowGreenBg }]}
+              >
+                <Text
+                  style={[styles.badgeText, { color: colors.LowGreenText }]}
+                >
+                  +2
+                </Text>
               </View>
             </View>
             <Text style={styles.metricNumber}>12</Text>
@@ -129,11 +135,26 @@ const HomeScreen = () => {
           {/* Tasks */}
           <View style={styles.metricCard}>
             <View style={styles.cardHeader}>
-              <View style={[styles.iconBox, { backgroundColor: colors.PurpleIconBg }]}>
-                <Feather name="check-square" size={ms(18)} color={colors.PurpleIcon} />
+              <View
+                style={[
+                  styles.iconBox,
+                  { backgroundColor: colors.PurpleIconBg },
+                ]}
+              >
+                <Feather
+                  name="check-square"
+                  size={18}
+                  color={colors.PurpleIcon}
+                />
               </View>
-              <View style={[styles.badge, { backgroundColor: colors.LowGreenBg }]}>
-                <Text style={[styles.badgeText, { color: colors.LowGreenText }]}>+8</Text>
+              <View
+                style={[styles.badge, { backgroundColor: colors.LowGreenBg }]}
+              >
+                <Text
+                  style={[styles.badgeText, { color: colors.LowGreenText }]}
+                >
+                  +8
+                </Text>
               </View>
             </View>
             <Text style={styles.metricNumber}>84</Text>
@@ -143,11 +164,25 @@ const HomeScreen = () => {
           {/* Pending */}
           <View style={styles.metricCard}>
             <View style={styles.cardHeader}>
-              <View style={[styles.iconBox, { backgroundColor: colors.HighAmberBg }]}>
-                <Feather name="clock" size={ms(18)} color={colors.HighAmberText} />
+              <View
+                style={[
+                  styles.iconBox,
+                  { backgroundColor: colors.HighAmberBg },
+                ]}
+              >
+                <Feather name="clock" size={18} color={colors.HighAmberText} />
               </View>
-              <View style={[styles.badge, { backgroundColor: colors.CriticalRedBg }]}>
-                <Text style={[styles.badgeText, { color: colors.CriticalRedText }]}>-3</Text>
+              <View
+                style={[
+                  styles.badge,
+                  { backgroundColor: colors.CriticalRedBg },
+                ]}
+              >
+                <Text
+                  style={[styles.badgeText, { color: colors.CriticalRedText }]}
+                >
+                  -3
+                </Text>
               </View>
             </View>
             <Text style={styles.metricNumber}>23</Text>
@@ -157,11 +192,21 @@ const HomeScreen = () => {
           {/* Done */}
           <View style={styles.metricCard}>
             <View style={styles.cardHeader}>
-              <View style={[styles.iconBox, { backgroundColor: colors.LowGreenBg }]}>
-                <Feather name="check-circle" size={ms(18)} color={colors.LowGreenText} />
+              <View
+                style={[styles.iconBox, { backgroundColor: colors.LowGreenBg }]}
+              >
+                <Feather
+                  name="check-circle"
+                  size={18}
+                  color={colors.LowGreenText}
+                />
               </View>
-              <View style={[styles.badge, { backgroundColor: colors.LowGreenBg }]}>
-                <Text style={[styles.badgeText, { color: colors.LowGreenText }]}>
+              <View
+                style={[styles.badge, { backgroundColor: colors.LowGreenBg }]}
+              >
+                <Text
+                  style={[styles.badgeText, { color: colors.LowGreenText }]}
+                >
                   +11
                 </Text>
               </View>
@@ -183,7 +228,10 @@ const HomeScreen = () => {
         <View style={styles.flatlistContainer}>
           <FlatList
             data={PROJECTS_DATA}
-            keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+            ListEmptyComponent={renderEmptyState}
+            keyExtractor={(item, index) =>
+              item.id?.toString() || index.toString()
+            }
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.listPadding}
             renderItem={({ item }) => {
@@ -199,7 +247,7 @@ const HomeScreen = () => {
                   >
                     <Ionicons
                       name="folder-open-outline"
-                      size={ms(22)}
+                      size={spacing.mtwentyTwo}
                       color={item.themeColor}
                     />
                   </View>
@@ -260,53 +308,56 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: s(15),
-    paddingTop: vs(12),
+    paddingHorizontal: spacing.fifteen,
+    paddingTop: spacing.vtewlve,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justify: 'space-between',
     alignItems: 'center',
-    marginBottom: vs(16),
+    marginBottom: spacing.vsixteen,
+    backgroundColor: colors.white,
+    paddingVertical: spacing.hten,
   },
   userInfo: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
   avatar: {
-    width: s(42),
-    height: s(42),
-    borderRadius: ms(21),
+    width: spacing.hfourtytwo,
+    height: spacing.hfourtytwo,
+    borderRadius: spacing.btewntyone,
     backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: s(10),
+    marginRight: spacing.hten,
   },
   avatarText: {
     color: colors.white,
-    fontWeight: 'bold',
-    fontSize: ms(14),
+    fontFamily: Fonts.Bold,
+    fontSize: typography.xxl,
   },
   userTextContainer: {
     justifyContent: 'center',
   },
   greetingText: {
-    fontSize: ms(13),
+    fontSize: typography.lg, // 13
     color: colors.MutedSlateGray,
   },
   userName: {
-    fontSize: ms(16),
+    fontSize: typography.tm,
     fontWeight: '700',
     color: colors.black,
   },
   headerIcons: {
     flexDirection: 'row',
-    gap: s(8),
+    gap: spacing.heights,
   },
   iconButton: {
-    width: s(40),
-    height: s(40),
-    borderRadius: ms(20),
+    width: spacing.hforty,
+    height: spacing.hforty,
+    borderRadius: spacing.mtwenty,
     backgroundColor: colors.Slate100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -314,101 +365,105 @@ const styles = StyleSheet.create({
   },
   notificationDot: {
     position: 'absolute',
-    top: vs(8),
-    right: s(8),
-    width: s(7),
-    height: s(7),
-    borderRadius: ms(3.5),
+    top: spacing.veight,
+    right: spacing.hten,
+    width: spacing.hseven,
+    height: spacing.hseven,
+    borderRadius: spacing.mthreePointFive,
     backgroundColor: colors.CriticalRedText,
   },
   metricsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: vs(8),
-    marginBottom: vs(16),
+    gap: spacing.veight,
+    marginBottom: spacing.vsixteen,
   },
   metricCard: {
-    width: s(155),
+    width: spacing.hOneFiftyFive,
     backgroundColor: colors.white,
-    borderRadius: ms(16),
-    paddingHorizontal: s(14),
-    paddingVertical: vs(9),
-    borderWidth: 1,
+    borderRadius: spacing.msixteen,
+    paddingHorizontal: spacing.hfourteen,
+    paddingVertical: spacing.vnine,
+    borderWidth: spacing.borderThin,
     borderColor: colors.Slate100,
   },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: vs(12),
+    marginBottom: spacing.vsix,
   },
   iconBox: {
-    width: s(36),
-    height: s(36),
-    borderRadius: ms(18),
+    width: spacing.hthirtySix,
+    height: spacing.hthirtySix,
+    borderRadius: spacing.meighteen,
     justifyContent: 'center',
     alignItems: 'center',
   },
   badge: {
-    paddingHorizontal: s(8),
-    paddingVertical: vs(4),
-    borderRadius: ms(10),
+    paddingHorizontal: spacing.heights,
+    paddingVertical: spacing.vfour,
+    borderRadius: spacing.mten,
   },
   badgeText: {
-    fontSize: ms(11),
+    fontSize: typography.lg,
     fontWeight: '700',
   },
   metricNumber: {
-    fontSize: ms(22),
+    paddingLeft: spacing.heights,
+    fontSize: typography.font20,
+    fontFamily: Fonts.ExtraBold,
     fontWeight: '800',
     color: colors.VeryDarkSlateBlue,
   },
   metricLabel: {
-    fontSize: ms(13),
+    paddingLeft: spacing.hfour,
+    fontSize: typography.lg, // 13
+    fontFamily: Fonts.Regular,
     color: colors.SlateGrayText,
-    marginTop: vs(4),
+    marginTop: spacing.vone,
   },
   activeProjectsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: vs(12),
+    marginBottom: spacing.vtewlve,
   },
   sectionTitle: {
-    fontSize: ms(16),
-    fontWeight: '700',
+    fontSize: typography.xl,
+    fontFamily: Fonts.SemiBold,
     color: colors.VeryDarkSlateBlue,
   },
   seeAllText: {
-    fontSize: ms(14),
+    fontSize: typography.xl,
+    fontFamily: Fonts.SemiBold,
     color: colors.primary,
-    fontWeight: '600',
   },
   flatlistContainer: {
     flex: 1,
   },
   listPadding: {
-    paddingBottom: vs(16),
+    paddingBottom: spacing.vfifty,
   },
   projectCard: {
     backgroundColor: colors.white,
-    borderRadius: ms(20),
-    paddingHorizontal: s(16),
-    paddingVertical: vs(14),
-    borderWidth: 1,
+    borderRadius: spacing.mtwenty,
+    paddingHorizontal: spacing.hsixteen,
+    paddingVertical: spacing.vfourteen,
+    borderWidth: spacing.borderThin,
     borderColor: colors.LightGray,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: vs(10),
+    marginBottom: spacing.vten,
   },
   folderIconBg: {
-    width: s(44),
-    height: s(44),
-    borderRadius: ms(20),
+    width: spacing.hfortyFour,
+    height: spacing.hfortyFour,
+    borderRadius: spacing.mtwenty,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: s(12),
+    marginRight: spacing.htwelve,
   },
   projectDetails: {
     flex: 1,
@@ -418,21 +473,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: vs(8),
+    marginBottom: spacing.vfive,
   },
   projectTitle: {
-    fontSize: ms(15),
-    fontWeight: '700',
+    fontSize: typography.xl,
+    fontFamily: Fonts.SemiBold,
     color: colors.VeryDarkSlateBlue,
   },
   priorityBadge: {
-    paddingHorizontal: s(10),
-    paddingVertical: vs(3),
-    borderRadius: ms(12),
+    paddingHorizontal: spacing.hten,
+    paddingVertical: spacing.vthree,
+    borderRadius: spacing.mtwelve,
   },
   priorityText: {
-    fontSize: ms(12),
-    fontWeight: '600',
+    fontSize: typography.m,
+    fontFamily: Fonts.SemiBold,
   },
   progressRow: {
     flexDirection: 'row',
@@ -440,19 +495,49 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     flex: 1,
-    height: vs(6),
+    height: spacing.vsix,
     backgroundColor: colors.LightGray,
-    borderRadius: ms(4),
-    marginRight: s(10),
+    borderRadius: spacing.mfour,
+    marginRight: spacing.hten,
     overflow: 'hidden',
   },
   progressBarFill: {
-    height: vs(6),
-    borderRadius: ms(4),
+    height: spacing.vsix,
+    borderRadius: spacing.mfour,
   },
   progressPercentText: {
-    fontSize: ms(12),
+    fontSize: spacing.mtwelve,
     fontWeight: '700',
     color: colors.MutedSlateGray,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justify: 'center',
+    paddingVertical: spacing.vthirty,
+    paddingHorizontal: spacing.fifteen,
+    marginBottom:spacing.vforty,
+  },
+  emptyIconBox: {
+    width: spacing.hfortyEight,
+    height: spacing.hfortyEight,
+    borderRadius: spacing.meighteen,
+    backgroundColor: colors.Slate100,
+    alignItems: 'center',
+    justify: 'center',
+    marginBottom: spacing.vtewlve,
+  },
+  emptyTitle: {
+    fontSize: typography.xxl,
+    fontFamily: Fonts.Bold,
+    color: colors.VeryDarkSlateBlue,
+    marginBottom: spacing.vfour,
+  },
+  emptySubtitle: {
+    fontSize: typography.lg,
+    fontFamily: Fonts.Regular,
+    color: colors.MutedSlateGray,
+    textAlign: 'center',
+    lineHeight: spacing.lhTwenty,
   },
 });

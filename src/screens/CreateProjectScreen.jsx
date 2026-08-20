@@ -18,33 +18,45 @@ import DropDown from '../components/DropDown';
 import CustomButton from '../components/CustomButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Fonts } from '../constants/Fonts';
+import { spacing } from '../constants/spacing';
+import { typography } from '../constants/typography';
+import { useNavigation } from '@react-navigation/native';
+import { Manager_Data, STATUS_DATA } from '../utils/ProjectsData';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../redux/slice/snackBarSlice';
 
-const STATUS_DATA = [
-  { label: 'Not Started', value: 'Not Started' },
-  { label: 'In Progress', value: 'In Progress' },
-  { label: 'On Hold', value: 'On Hold' },
-  { label: 'Completed', value: 'Completed' },
-];
-
-const Manager_Data = [
-  { label: 'Alex Chen', value: 'Alex Chen' },
-  { label: 'Sarah Kim', value: 'Sarah Kim' },
-];
 
 const CreateProjectScreen = () => {
-  const [activeTab, setActiveTab] = useState('Low');
+    const dispatch=useDispatch();
+
   const [status, setStatus] = useState('');
   const [manager, setManager] = useState('');
-  const [projectName, setProjectName] = useState('');
-  const [desc, setDesc] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const [priority, setPriority] = useState('Low');
-  const [teamMembers, setTeamMembers] = useState([]);
+  const navigation= useNavigation();
+  const handleAddMember = () => {};
 
-  const handleAddUser = () => {};
+  const handleCreate = () => {
+    
 
-  const handleCreate = () => {};
+
+
+    try{
+    //  navigation.navigate('BottomTabs', { screen: "Home"});
+      dispatch(
+        showSnackbar({
+          message:"Project Created Succesfully",
+          type:"success"
+        })
+      )
+    }catch(error){
+      dispatch (
+        showSnackbar({
+          message:"Unable to create project",
+          type:"error",
+        })
+      )
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -72,6 +84,8 @@ const CreateProjectScreen = () => {
               label="Description"
               placeholder="Project Description...."
               placeholderTextColor={colors.Dargrey}
+              multline={true}
+              numberofLines={3}
             />
             <DateRangePicker />
             <View style={styles.tabSwitchContainer}>
@@ -91,7 +105,7 @@ const CreateProjectScreen = () => {
                 items={STATUS_DATA}
                 value={status}
                 onSelect={setStatus}
-                zIndex={5000}
+                zIndex={spacing.zIndexMax}
               />
 
               <DropDown
@@ -100,7 +114,7 @@ const CreateProjectScreen = () => {
                 items={Manager_Data}
                 value={manager}
                 onSelect={setManager}
-                zIndex={4000}
+                zIndex={spacing.zIndexHigh}
               />
 
               {/* Perfectly Aligned Bottom Section */}
@@ -109,12 +123,12 @@ const CreateProjectScreen = () => {
                 <TouchableOpacity
                   style={styles.addMemberbtn}
                   activeOpacity={0.7}
-                  onPress={handleAddUser}
+                  onPress={handleAddMember}
                 >
                   <View style={styles.nameAndicon}>
                     <Icon
                       name="person-add-outline"
-                      size={15}
+                      size={spacing.mfifteen}
                       color={colors.primary}
                     />
                     <Text style={styles.txt}>Add Members</Text>
@@ -137,62 +151,63 @@ export default CreateProjectScreen;
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    flex: spacing.a,
     backgroundColor: colors.white,
   },
   keyboardView: {
-    flex: 1,
+    flex: spacing.a,
   },
   main: {
-    flex: 1,
+    flex: spacing.a,
     backgroundColor: colors.white,
-    paddingHorizontal: '4%',
+    paddingHorizontal: spacing.vfourteen,
   },
   formContainer: {
-    paddingBottom: '10%',
+    paddingBottom: spacing.vfifteen,
   },
   dropdownContainer: {
-    zIndex: 5000,
-    elevation: 5000,
-    marginVertical: '1%',
+    zIndex: spacing.zIndexMax,
+    elevation: spacing.zIndexMax,
+    marginVertical: spacing.vfour,
   },
   tabSwitchContainer: {
-    marginTop: '2%',
-    paddingHorizontal: '2%',
-    zIndex: 1,
+    marginTop: spacing.vsix,
+    paddingHorizontal: spacing.hsix,
+    zIndex: spacing.a,
   },
   tabSwitcher: {
-    marginTop: '2%',
-    paddingHorizontal: '3%',
+    marginTop: spacing.vsix,
+    paddingHorizontal: spacing.hsix,
     justifyContent: 'center',
   },
   tabswitchertext: {
+    fontSize: typography.m,
+    fontFamily: Fonts.SemiBold,
     color: colors.Dargrey,
-    fontSize: 13,
   },
   pill: {
-    paddingHorizontal: '8%',
+    paddingHorizontal: spacing.eight,
   },
 
   addMemberContainer: {
-    width: '100%',
-    marginVertical: '4%',
+    width: spacing.fullWidth,
+    marginVertical: spacing.vtewlve,
   },
   teammmbrtxt: {
     color: colors.Dargrey,
-    fontSize: 12,
+    fontSize: spacing.mtwelve,
     fontWeight: '600',
-    letterSpacing: 0.5,
-    marginBottom: '2%',
+    letterSpacing: spacing.aa,
+    marginBottom: spacing.veight,
   },
   addMemberbtn: {
     alignSelf: 'flex-start',
     borderStyle: 'dashed',
-    borderWidth: 1,
+    borderWidth: spacing.borderThin,
     borderColor: colors.primary,
-    borderRadius: 20,
-    paddingVertical: '2.5%',
-    paddingHorizontal: '5%',
+    borderRadius: spacing.mtwenty,
+    paddingVertical: spacing.veight,
+    paddingHorizontal: spacing.fifteen,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -200,16 +215,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    columnGap: '4%',
   },
   txt: {
     color: colors.primary,
     fontFamily: Fonts.SemiBold,
-    fontSize: 13,
+    fontSize: typography.lg,
     includeFontPadding: false,
+    marginLeft: spacing.heights,
     textAlignVertical: 'center',
   },
   buttonWrapper: {
-    marginTop: '2%',
+    marginTop: spacing.vsix,
   },
 });
