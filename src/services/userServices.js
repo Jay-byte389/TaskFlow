@@ -1,39 +1,46 @@
-export const register = async()=>{
-        const userCredential = await createUserWithEmailAndPassword(
-        authInstance,
-        email.trim(),
-        password,
-      );
 
-      const user = userCredential.user;
+import { getAuth, signInWithEmailAndPassword } from '@react-native-firebase/auth';
+import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        email: email.trim().toLowerCase(),
-        phone: phone.trim(),
-        company: company.trim(),
-        agreedToTerms: agredTerms,
-      });
+export const createLogin = async (email, password) => {
+  if (!email?.trim() || !password?.trim()) {
+    throw new Error('Please enter both email and password.');
+  }
 
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setPhone('');
-      setCompany('');
-      setPassword('');
-      setConfirmPassword('');
-      setAgrredTerms(false);
+  try {
+    const authInstance = getAuth();
+    const db = getFirestore();
 
-      dispatch(
-        showSnackbar({
-          message: 'Account Created Successfully....',
-          type: 'success',
-        }),
-      );
+    const userCredential = await signInWithEmailAndPassword(
+      authInstance,
+      email.trim().toLowerCase(),
+      password,
+    );
 
-      navigation.navigate('Login');
-}
+    const user = userCredential.user;
+    const userSnapshot = await getDoc(doc(db, 'users', user.uid));
+
+    if (!userSnapshot.exists()) {
+      throw new Error('User profile was not found.');
+    }
+
+    return userSnapshot.data();
+  } catch (error) {
+    console.log('Login error in userServices:', error);
+
+    let errorMessage = 'Unable to login.';
+    if (error.code === 'auth/invalid-credential') {
+      errorMessage = 'Invalid email or password.';
+    } else if (error.code === 'auth/user-not-found') {
+      errorMessage = 'No account found with this email.';
+    } else if (error.code === 'auth/wrong-password') {
+      errorMessage = 'Incorrect password.';
+    } else if (error.code === 'auth/invalid-email') {
+      errorMessage = 'Invalid email address.';
+    } else if (error.code === 'auth/user-disabled') {
+      errorMessage = 'This account has been disabled.';
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+  }
+};

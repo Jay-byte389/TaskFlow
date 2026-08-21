@@ -20,16 +20,11 @@ import CustomButton from '../components/CustomButton';
 import RedGlobe from '../assets/icons/RedGlobe';
 import BlackGlobe from '../assets/icons/BlackGlobe';
 import { useNavigation } from '@react-navigation/native';
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from '@react-native-firebase/auth';
+
 import { signInWithGoogle } from '../services/googleSign';
-import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 import { useDispatch } from 'react-redux';
 import { showSnackbar } from '../redux/slice/snackBarSlice';
-import { vs,s,ms } from 'react-native-size-matters';
-
+import { createLogin } from '../services/userServices';
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -37,59 +32,40 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const gradientColors = [colors.primary, colors.secondary];
-
   const handleLogin = async () => {
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('Error', 'Please Enter the email and Password');
-      return;
-    }
-    setLoading(true);
-    try {
-      const authInstance = getAuth();
-      const db = getFirestore();
-      const userCredential = await signInWithEmailAndPassword(
-        authInstance,
-        email.trim().toLowerCase(),
-        password,
-      );
-      const user = userCredential.user;
-      const userSnapshot = await getDoc(doc(db, 'users', user.uid));
+  if (!email.trim() || !password.trim()) {
+    dispatch(
+      showSnackbar({
+        message: 'Please enter email and password.',
+        type: 'error',
+      }),
+    );
+    return;
+  }
 
-      if (userSnapshot.exists()) {
-        const userData = userSnapshot.data();
-        console.log('Logged in user:', userData);
+  setLoading(true);
+  try {
+    const userData = await createLogin(email, password);
 
-        dispatch(
-          showSnackbar({
-            message: 'Login SuccessFully...',
-            type: 'success',
-          }),
-        );
-        
-      } else {
-        setLoading(false);
-        Alert.alert('Error', 'User profile was not found.');
-      }
-    } catch (error) {
-      console.log('Login error:', error);
+    dispatch(
+      showSnackbar({
+        message: 'Login Successfully...',
+        type: 'success',
+      }),
+    );
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
-      let errorMessage = 'Unable to login.';
-
-      if (error.code === 'auth/invalid-credential') {
-        errorMessage = 'Invalid email or password.';
-      } else if (error.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email.';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Incorrect password.';
-      } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Invalid email address.';
-      } else if (error.code === 'auth/user-disabled') {
-        errorMessage = 'This account has been disabled.';
-      }
-
-      Alert.alert('Login Failed', errorMessage);
-    }
-  };
+  } catch (error) {
+    dispatch(
+      showSnackbar({
+        message: error.message || 'Something Went Wrong',
+        type: 'error',
+      }),
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleForgot = () => {
     navigation.navigate('Forgot');
@@ -102,7 +78,20 @@ const LoginScreen = () => {
   const handleGooglePress = async () => {
     try {
       await signInWithGoogle();
-    } catch (error) {}
+      dispatch(
+        showSnackbar({
+          message: 'Logged in Successfully....',
+          type: 'success',
+        }),
+      );
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          messgae: 'Something Went Wrong',
+          type: 'error',
+        }),
+      );
+    }
   };
 
   return (
@@ -126,7 +115,10 @@ const LoginScreen = () => {
                     end={{ x: 1, y: 1 }}
                     style={styles.card}
                   >
-                    <LoginIcon width={spacing.hthirtySix} height={spacing.hthirtySix} />
+                    <LoginIcon
+                      width={spacing.hthirtySix}
+                      height={spacing.hthirtySix}
+                    />
                   </LinearGradient>
                 </View>
 
@@ -172,7 +164,11 @@ const LoginScreen = () => {
               </View>
 
               <View style={styles.btnContainer}>
-                <CustomButton title="Sign In" onPress={handleLogin} loading={loading} />
+                <CustomButton
+                  title="Sign In"
+                  onPress={handleLogin}
+                  loading={loading}
+                />
               </View>
 
               {/* Divider */}
@@ -189,7 +185,10 @@ const LoginScreen = () => {
                   activeOpacity={0.7}
                   onPress={handleGooglePress}
                 >
-                  <RedGlobe width={spacing.hEighteen} height={spacing.hEighteen} />
+                  <RedGlobe
+                    width={spacing.hEighteen}
+                    height={spacing.hEighteen}
+                  />
                   <Text style={styles.socialText}>Google</Text>
                 </TouchableOpacity>
 
@@ -197,7 +196,10 @@ const LoginScreen = () => {
                   style={styles.socialButton}
                   activeOpacity={0.7}
                 >
-                  <BlackGlobe width={spacing.hEighteen} height={spacing.hEighteen} />
+                  <BlackGlobe
+                    width={spacing.hEighteen}
+                    height={spacing.hEighteen}
+                  />
                   <Text style={styles.socialText}>GitHub</Text>
                 </TouchableOpacity>
               </View>

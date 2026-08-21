@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -9,25 +9,28 @@ import TeamScreen from '../screens/TeamScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Platform } from 'react-native';
+
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-  const insets =useSafeAreaInsets();
-  const [isFocused,setisFocused]= useState(false);
+  const insets = useSafeAreaInsets();
+  
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#2260FF',
-        tabBarInactiveTintColor: '#A8B0BE', 
+        tabBarInactiveTintColor: '#A8B0BE',
+        tabBarHideOnKeyboard: true, 
         tabBarStyle: {
-          position:'absolute',
-            height: Platform.OS=='android' ? 50+ insets.bottom :60,
-             paddingBottom:10     
+          position: 'relative',
+          height: Platform.OS === 'android' ? 50 + insets.bottom : 60,
+          paddingBottom: 10,
+          
         },
-      }
-    }
+      }}
     >
       <Tab.Screen
         name="Home"
@@ -48,6 +51,7 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
+
       <Tab.Screen
         name="Tasks"
         component={TaskScreen}
@@ -57,6 +61,7 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
+
       <Tab.Screen
         name="Team"
         component={TeamScreen}

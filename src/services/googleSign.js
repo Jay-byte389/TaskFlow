@@ -16,8 +16,6 @@ export const signInWithGoogle = async () => {
       showPlayServicesUpdateDialog: true,
     });
     await GoogleSignin.signOut();
-
-
     console.log('2. Play Services OK');
 
     const response = await GoogleSignin.signIn();
@@ -72,3 +70,4 @@ export const signInWithGoogle = async () => {
     );
   }
 };
+
